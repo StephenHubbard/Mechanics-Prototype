@@ -6,31 +6,51 @@ public class PlayerController : MonoBehaviour
 {
     protected FrameInput FrameInput;
 
-    public Vector2 Input => FrameInput.Move;
+    public Vector2 MoveInput => FrameInput.Move;
 
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _dashSpeed;
+    [SerializeField] private float _dashTime = .7f;
+    [SerializeField] private float _dashCD = 2f;
+    [SerializeField] private float _jumpStrength;
+    [SerializeField] private float _maxFallSpeed = -10f;
+    [SerializeField] private float _extraGravity = 50f;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private LayerMask _groundLayer = new LayerMask();
+    [SerializeField] private Transform _feetTransform;
+    [SerializeField] private Vector2 _groundCheck;
+    [SerializeField] private float _coyoteTime = 0.2f;
 
     private Vector2 _moveDir;
-
+    private float _coyoteTimer, _lastDash;
     private Rigidbody2D _rb;
+    private TrailRenderer _trailRenderer;
     private PlayerInput _playerInput;
+    private bool _jumping, _dashing;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
 
     private void Start() {
-        
+        _jumping = false;
+        _dashing = false;
+        _lastDash = -_dashCD;
     }
 
     private void Update()
     {
         GatherInput();
+        HandleSpriteFlip();
+        CoyoteTimer();
+        Jump();
+        Dash();
     }
 
     private void FixedUpdate() {
-        // Movement();
+        Movement();
     }
     
     private void GatherInput()
@@ -40,6 +60,97 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Movement() {
-        _rb.velocity = _moveDir * (_moveSpeed * Time.fixedDeltaTime);
+        if (_dashing) { return; }
+
+        Vector2 newVelocity = new Vector2(_moveDir.x * _moveSpeed, _rb.velocity.y);
+        _rb.velocity = newVelocity;
+
+        if (_rb.velocity.y < _maxFallSpeed)
+        {
+            _rb.velocity = new Vector2(_rb.velocity.x, _maxFallSpeed);
+        }
+    }
+
+    private void CoyoteTimer()
+    {
+        if (CheckGrounded())
+        {
+            _coyoteTimer = _coyoteTime;
+        }
+        else
+        {
+            _coyoteTimer -= Time.deltaTime;
+        }
+    }
+
+    private Collider2D CheckGrounded() {
+        Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0, _groundLayer);
+
+        return isGrounded;
+    }
+
+    // CheckGrounded() Gizmo
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(_feetTransform.position, _groundCheck);
+    }
+
+    private void Jump()
+    {
+        if (!CheckGrounded() && !FrameInput.JumpHeld)
+        {
+            _rb.AddForce(new Vector2(0, -_extraGravity * Time.deltaTime));
+        }
+
+        if (FrameInput.Jump && !_jumping && _coyoteTimer > 0 && CheckGrounded())
+        {
+            _rb.velocity = Vector2.up * _jumpStrength;
+            _coyoteTimer = 0;
+            _jumping = true;
+            StartCoroutine(JumpCDRoutine());
+        }
+    }
+
+    private IEnumerator JumpCDRoutine()
+    {
+        float jumpRefreshTime = .2f;
+        yield return new WaitForSeconds(jumpRefreshTime);
+        _jumping = false;
+    }
+
+    private void Dash()
+    {
+        if (FrameInput.Dash && Time.time >= _lastDash + _dashCD)
+        {
+            _dashing = true;
+            _trailRenderer.enabled = true;
+            Vector2 direction = transform.eulerAngles.y == 0 ? Vector2.right : Vector2.left;
+            _rb.velocity = direction * _dashSpeed;
+            _lastDash = Time.time;
+            StartCoroutine(DashRoutine());
+        }
+    }
+
+    private IEnumerator DashRoutine()
+    {
+        yield return new WaitForSeconds(_dashTime);
+        _dashing = false;
+        yield return new WaitForSeconds(_dashTime);
+        _trailRenderer.enabled = false;
+    }
+
+    private void HandleSpriteFlip()
+    {
+        if (MoveInput.x == 0) { return; }
+
+        if (MoveInput.x < 0)
+        {
+            transform.eulerAngles = new Vector3(0f, -180f, 0f);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+        }
     }
 }
