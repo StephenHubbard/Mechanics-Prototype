@@ -35,6 +35,7 @@ public class PlayerInput : MonoBehaviour
             Dash = _dash.WasPressedThisFrame(),
             JumpHeld = _jump.IsPressed(),
             Attack = _attack.WasPressedThisFrame(),
+            AttackHeld = _attack.IsPressed(),
         };
     }
 }
@@ -43,6 +44,7 @@ public struct FrameInput
 {
     public Vector2 Move;
     public bool Attack;
+    public bool AttackHeld;
     public bool Dash;
     public bool Jump;
     public bool JumpHeld;

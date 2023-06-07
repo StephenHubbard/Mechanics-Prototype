@@ -20,7 +20,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private float _coyoteTime = 0.2f;
+    [SerializeField] private float _tiltAngle = 10f;
+    [SerializeField] private float _tiltSpeed = 5f;
 
+    private Quaternion _targetTiltRotation;
     private Vector2 _moveDir;
     private float _coyoteTimer, _lastDash;
     private Rigidbody2D _rb;
@@ -44,6 +47,7 @@ public class PlayerController : MonoBehaviour
     {
         GatherInput();
         HandleSpriteFlip();
+        ApplyTilt();
         CoyoteTimer();
         Jump();
         Dash();
@@ -51,6 +55,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
         Movement();
+    }
+
+    public bool IsFacingRight()
+    {
+        return transform.eulerAngles.y == 0;
     }
     
     private void GatherInput()
@@ -125,8 +134,11 @@ public class PlayerController : MonoBehaviour
         {
             _dashing = true;
             _trailRenderer.enabled = true;
-            Vector2 direction = transform.eulerAngles.y == 0 ? Vector2.right : Vector2.left;
+
+            Vector2 direction = _rb.velocity.normalized;
+
             _rb.velocity = direction * _dashSpeed;
+
             _lastDash = Time.time;
             StartCoroutine(DashRoutine());
         }
@@ -136,21 +148,43 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(_dashTime);
         _dashing = false;
-        yield return new WaitForSeconds(_dashTime);
+        yield return new WaitForSeconds(.3f);
         _trailRenderer.enabled = false;
     }
 
     private void HandleSpriteFlip()
     {
-        if (MoveInput.x == 0) { return; }
+        if (MechanicsManager.Instance.GunToggle) {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (MoveInput.x < 0)
-        {
-            transform.eulerAngles = new Vector3(0f, -180f, 0f);
+            if (mousePosition.x < transform.position.x)
+            {
+                transform.eulerAngles = new Vector3(0f, -180f, 0f);
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            }
+        } else {
+            if (MoveInput.x < 0)
+            {
+                transform.eulerAngles = new Vector3(0f, -180f, 0f);
+            }
+            else if (MoveInput.x > 0)
+            {
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            }
         }
-        else
-        {
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
-        }
+    }
+
+    private void ApplyTilt()
+    {
+        float targetAngle = MoveInput.x < 0 ? _tiltAngle : MoveInput.x > 0 ? -_tiltAngle : 0f;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
+        Quaternion currentRotation = _spriteRenderer.transform.rotation;
+
+        targetRotation.eulerAngles = new Vector3(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, targetRotation.eulerAngles.z);
+
+        _spriteRenderer.transform.rotation = Quaternion.Lerp(_spriteRenderer.transform.rotation, targetRotation, _tiltSpeed * Time.deltaTime);
     }
 }
