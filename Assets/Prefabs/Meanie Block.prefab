@@ -153,7 +153,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7118453075181483482
 RectTransform:
   m_ObjectHideFlags: 0
@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 5381035770098392452}
   - component: {fileID: 4979987772040739455}
   - component: {fileID: 2730755534599638069}
+  - component: {fileID: 7528953342479262250}
   m_Layer: 6
   m_Name: Meanie Block
   m_TagString: Untagged
@@ -401,6 +402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e652642db6260344cb636626629dc1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startingHealth: 3
+  _deathVFX: {fileID: 7882678833386788365, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
 --- !u!114 &2730755534599638069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,3 +418,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 3
   _changeDirectionTime: 4
+--- !u!114 &7528953342479262250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5446767472388699119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a68994746bc1d4429822b7e5755b4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _knockBackTime: 0.2
+  _whiteFlashMat: {fileID: 2100000, guid: 9cab85c9cc19bf8419422c1dcfe73879, type: 2}
+  _spriteRenderer: {fileID: 2306867441553708999}

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     protected FrameInput FrameInput;
 
@@ -31,7 +31,9 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput;
     private bool _jumping, _dashing;
 
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
+
         _rb = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
@@ -187,4 +189,5 @@ public class PlayerController : MonoBehaviour
 
         _spriteRenderer.transform.rotation = Quaternion.Lerp(_spriteRenderer.transform.rotation, targetRotation, _tiltSpeed * Time.deltaTime);
     }
+
 }

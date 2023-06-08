@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5114130772895876929}
   - component: {fileID: 6928009655340166906}
   - component: {fileID: 6433746802972306475}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 682f9eb14dfa8394499c112cf46da17e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,8 +134,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 324da6bc5594197419d59cac9e0abd95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 20
+  _moveSpeed: 30
   _hitVFX: {fileID: 2382336311522290384, guid: 0b8c77d7eceb0434a93915324223f315, type: 3}
+  _knockBackForce: 20
 --- !u!50 &6433746802972306475
 Rigidbody2D:
   serializedVersion: 4

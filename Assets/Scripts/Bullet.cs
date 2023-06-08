@@ -6,19 +6,25 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 10f;
     [SerializeField] private GameObject _hitVFX;
+    [SerializeField] private float _knockBackForce = 5f;
 
     private void Update() {
         MoveProjectile();
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (MechanicsManager.Instance.VfxToggle) {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (MechanicsManager.Instance.VfxToggle)
+        {
             Instantiate(_hitVFX, transform.position, Quaternion.identity);
         }
 
-        EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-        enemyHealth?.TakeDamage();
-        
+        Health health = other.gameObject.GetComponent<Health>();
+        health?.TakeDamage();
+
+        Knockback knockback = other.gameObject.GetComponent<Knockback>();
+        knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
+
         Destroy(gameObject);
     }
 

@@ -7,12 +7,14 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float _changeDirectionTime = 4f;
 
     private Rigidbody2D _rb;
+    private Knockback _knockback;
     private float _currentDirection;
     private Coroutine _changeDirectionCoroutine;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _knockback = GetComponent<Knockback>();
     }
 
     private void Start()
@@ -28,6 +30,8 @@ public class EnemyMovement : MonoBehaviour
 
     private void Move()
     {
+        if (_knockback.GettingKnockedBack) { return; }
+
         _rb.velocity = new Vector2(_currentDirection * _moveSpeed, _rb.velocity.y);
     }
 
