@@ -5,6 +5,7 @@ using UnityEngine;
 public class Knockback : MonoBehaviour
 {
     public bool GettingKnockedBack { get; private set; }
+    public float KnockBackTime => _knockBackTime;
 
     [SerializeField] private float _knockBackTime = .2f;
     [SerializeField] private Material _whiteFlashMat;

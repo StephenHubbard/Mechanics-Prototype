@@ -137,6 +137,9 @@ MonoBehaviour:
   _moveSpeed: 30
   _hitVFX: {fileID: 2382336311522290384, guid: 0b8c77d7eceb0434a93915324223f315, type: 3}
   _knockBackForce: 20
+  _collisionLayers:
+    serializedVersion: 2
+    m_Bits: 255
 --- !u!50 &6433746802972306475
 Rigidbody2D:
   serializedVersion: 4
@@ -149,9 +152,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:

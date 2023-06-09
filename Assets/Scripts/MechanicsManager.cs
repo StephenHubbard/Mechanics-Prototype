@@ -8,10 +8,11 @@ public class MechanicsManager : Singleton<MechanicsManager>
 {
     public bool PlayerControllerToggle => _playerControllerToggle.isOn;
     public bool GunToggle => _gunToggle.isOn;
-    public bool VfxToggle => _vfxToggle.isOn;
+    public bool VFXToggle => _vfxToggle.isOn;
     public bool ScreenShakeToggle => _screenShakeToggle.isOn;
     public bool HitFeedbackToggle => _hitFeedbackToggle.isOn;
     public bool PostProcessingToggle => _postProcessingToggle.isOn;
+    public bool PlayerAnimationsToggle => _playerAnimationsToggle.isOn;
 
     [SerializeField] private Toggle _playerControllerToggle;
     [SerializeField] private Toggle _gunToggle;
@@ -19,6 +20,7 @@ public class MechanicsManager : Singleton<MechanicsManager>
     [SerializeField] private Toggle _screenShakeToggle;
     [SerializeField] private Toggle _hitFeedbackToggle;
     [SerializeField] private Toggle _postProcessingToggle;
+    [SerializeField] private Toggle _playerAnimationsToggle;
 
     private BasicPlayerController _basicPlayerController;
     private PlayerController _playerController;

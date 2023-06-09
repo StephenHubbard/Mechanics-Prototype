@@ -15,20 +15,18 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _jumpStrength;
     [SerializeField] private float _maxFallSpeed = -10f;
     [SerializeField] private float _extraGravity = 50f;
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private LayerMask _groundLayer = new LayerMask();
+    [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private float _coyoteTime = 0.2f;
-    [SerializeField] private float _tiltAngle = 10f;
-    [SerializeField] private float _tiltSpeed = 5f;
-
+    
     private Quaternion _targetTiltRotation;
     private Vector2 _moveDir;
     private float _coyoteTimer, _lastDash;
     private Rigidbody2D _rb;
     private TrailRenderer _trailRenderer;
     private PlayerInput _playerInput;
+    private Knockback _knockBack;
     private bool _jumping, _dashing;
 
     protected override void Awake() {
@@ -37,6 +35,7 @@ public class PlayerController : Singleton<PlayerController>
         _rb = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
+        _knockBack = GetComponent<Knockback>();
     }
 
     private void Start() {
@@ -49,7 +48,6 @@ public class PlayerController : Singleton<PlayerController>
     {
         GatherInput();
         HandleSpriteFlip();
-        ApplyTilt();
         CoyoteTimer();
         Jump();
         Dash();
@@ -71,13 +69,15 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void Movement() {
-        if (_dashing) { return; }
+        if (_dashing || _knockBack.GettingKnockedBack) { return; }
 
         Vector2 newVelocity = new Vector2(_moveDir.x * _moveSpeed, _rb.velocity.y);
         _rb.velocity = newVelocity;
 
         if (_rb.velocity.y < _maxFallSpeed)
         {
+            // come back to
+            Debug.Log("max fall speed");
             _rb.velocity = new Vector2(_rb.velocity.x, _maxFallSpeed);
         }
     }
@@ -94,7 +94,7 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    private Collider2D CheckGrounded() {
+    public Collider2D CheckGrounded() {
         Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0, _groundLayer);
 
         return isGrounded;
@@ -150,7 +150,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         yield return new WaitForSeconds(_dashTime);
         _dashing = false;
-        yield return new WaitForSeconds(.3f);
+        yield return new WaitForSeconds(.2f);
         _trailRenderer.enabled = false;
     }
 
@@ -179,15 +179,6 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    private void ApplyTilt()
-    {
-        float targetAngle = MoveInput.x < 0 ? _tiltAngle : MoveInput.x > 0 ? -_tiltAngle : 0f;
-        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
-        Quaternion currentRotation = _spriteRenderer.transform.rotation;
-
-        targetRotation.eulerAngles = new Vector3(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, targetRotation.eulerAngles.z);
-
-        _spriteRenderer.transform.rotation = Quaternion.Lerp(_spriteRenderer.transform.rotation, targetRotation, _tiltSpeed * Time.deltaTime);
-    }
+   
 
 }

@@ -3,26 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Cinemachine;
+using UnityEngine.Pool;
 
 public class Gun : MonoBehaviour
 {
-    protected FrameInput FrameInput;
-
+    public Transform BulletSpawnPoint => _bulletSpawnPoint;
     public bool AttackInput => FrameInput.Attack;
+    
+    protected FrameInput FrameInput;
 
     [SerializeField] private float _gunFireCD = .3f;
     [SerializeField] private Transform _bulletSpawnPoint;
-    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private float _rotationClamp = 60f;
 
-    private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
 
+    private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
+    private ObjectPool<Bullet> _bulletPool;
     private float _lastFireTime = -1; // better to set to -1 than 0 from chatgpt
     private Animator _animator;
     private PlayerInput _playerInput;
     private PlayerController _playerController;
     private CinemachineImpulseSource _fireImpulseSource;
-    
 
     private void Awake()
     {
@@ -32,15 +34,44 @@ public class Gun : MonoBehaviour
         _fireImpulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
+    private void Start() {
+        CreateBulletPool();
+    }
+
     private void Update() {
         FrameInput = _playerInput.FrameInput;
-
-        RotateGun();
 
         if (Time.time >= _lastFireTime + _gunFireCD)
         {
             Shoot();
         }
+    }
+
+    // Was getting some jitter since player is moving on FixedUpdate
+    private void FixedUpdate() {
+        RotateGun();
+    }
+
+    private void CreateBulletPool()
+    {
+        _bulletPool = new ObjectPool<Bullet>(() =>
+        {
+            return Instantiate(_bulletPrefab);
+        }, bullet =>
+        {
+            bullet.gameObject.SetActive(true);
+        }, bullet =>
+        {
+            bullet.gameObject.SetActive(false);
+        }, bullet =>
+        {
+            Destroy(bullet);
+        }, false, 50, 100);
+    }
+
+    public void ReleaseBulletFromPool(Bullet bullet)
+    {
+        _bulletPool.Release(bullet);
     }
 
     private void RotateGun()
@@ -56,12 +87,13 @@ public class Gun : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    private void Shoot() {
+    private void Shoot()
+    {
         if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
         if (FrameInput.AttackHeld)
         {
-            GameObject newBullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, transform.rotation);
+            Bullet newBullet = _bulletPool.Get();
             _animator.Play(FIRE_HASH, 0, 0);
             _lastFireTime = Time.time;
 
@@ -71,4 +103,5 @@ public class Gun : MonoBehaviour
             }
         }
     }
+
 }

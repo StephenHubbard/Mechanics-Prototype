@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public float KnockbackThrust => _knockBackThrust;
+
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _changeDirectionTime = 4f;
+    [SerializeField] private float _knockBackThrust = 5f;
 
     private Rigidbody2D _rb;
     private Knockback _knockback;

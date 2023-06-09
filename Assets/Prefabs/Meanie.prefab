@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 2730755534599638069}
   - component: {fileID: 7528953342479262250}
   m_Layer: 6
-  m_Name: Meanie Block
+  m_Name: Meanie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,7 +274,7 @@ Transform:
   m_Children:
   - {fileID: 7118453075181483482}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2306867441553708999
 SpriteRenderer:
@@ -402,8 +402,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e652642db6260344cb636626629dc1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayer: 0
   _startingHealth: 3
-  _deathVFX: {fileID: 7882678833386788365, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+  _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
 --- !u!114 &2730755534599638069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,6 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 3
   _changeDirectionTime: 4
+  _knockBackThrust: 25
 --- !u!114 &7528953342479262250
 MonoBehaviour:
   m_ObjectHideFlags: 0
