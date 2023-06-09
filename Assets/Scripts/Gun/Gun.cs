@@ -13,14 +13,16 @@ public class Gun : MonoBehaviour
     protected FrameInput FrameInput;
 
     [SerializeField] private float _gunFireCD = .3f;
+    [SerializeField] private float _grenadeThrowCD = 1f;
     [SerializeField] private Transform _bulletSpawnPoint;
     [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private Grenade _grenadePrefab;
     [SerializeField] private float _rotationClamp = 60f;
-
 
     private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
     private ObjectPool<Bullet> _bulletPool;
     private float _lastFireTime = -1; // better to set to -1 than 0 from chatgpt
+    private float _lastThrowTime = -1; 
     private Animator _animator;
     private PlayerInput _playerInput;
     private PlayerController _playerController;
@@ -39,11 +41,18 @@ public class Gun : MonoBehaviour
     }
 
     private void Update() {
+        if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
         FrameInput = _playerInput.FrameInput;
 
         if (Time.time >= _lastFireTime + _gunFireCD)
         {
             Shoot();
+        }
+
+        if (Time.time >= _lastThrowTime + _grenadeThrowCD)
+        {
+            ThrowGrenade();
         }
     }
 
@@ -89,11 +98,17 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) { return; }
-
         if (FrameInput.AttackHeld)
         {
-            Bullet newBullet = _bulletPool.Get();
+            if (MechanicsManager.Instance.ObjectPoolingToggle)
+            {
+                Bullet newBullet = _bulletPool.Get();
+            }
+            else
+            {
+                Bullet newBullet = Instantiate(_bulletPrefab);
+            }
+
             _animator.Play(FIRE_HASH, 0, 0);
             _lastFireTime = Time.time;
 
@@ -101,6 +116,13 @@ public class Gun : MonoBehaviour
             {
                 _fireImpulseSource.GenerateImpulse();
             }
+        }
+    }
+
+    private void ThrowGrenade() {
+        if (FrameInput.Grenade) {
+            Grenade newGrenade = Instantiate(_grenadePrefab, _bulletSpawnPoint.position, Quaternion.identity);
+            _lastThrowTime = Time.time;
         }
     }
 

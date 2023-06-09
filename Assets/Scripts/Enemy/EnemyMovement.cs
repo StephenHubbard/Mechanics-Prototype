@@ -12,7 +12,7 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody2D _rb;
     private Knockback _knockback;
     private float _currentDirection;
-    private Coroutine _changeDirectionCoroutine;
+    private EnemySpawner _enemySpawner;
 
     private void Awake()
     {
@@ -47,19 +47,10 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public void StartMoving()
+    private void StartMoving()
     {
-        if (_changeDirectionCoroutine != null)
-            StopCoroutine(_changeDirectionCoroutine);
+        if (!gameObject.activeInHierarchy) { return; }
 
-        _changeDirectionCoroutine = StartCoroutine(ChangeDirection());
-    }
-
-    public void StopMoving()
-    {
-        if (_changeDirectionCoroutine != null)
-            StopCoroutine(_changeDirectionCoroutine);
-
-        _rb.velocity = Vector2.zero;
+        StartCoroutine(ChangeDirection());
     }
 }

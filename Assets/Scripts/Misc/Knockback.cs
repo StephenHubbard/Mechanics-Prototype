@@ -20,6 +20,10 @@ public class Knockback : MonoBehaviour
         defaultMat = _spriteRenderer.material;
     }
 
+    private void OnEnable() {
+        _spriteRenderer.material = defaultMat;
+    }
+
     public void GetKnockedBack(Vector2 damageSource, float knockBackThrust)
     {
         if (!MechanicsManager.Instance.HitFeedbackToggle) { return; }

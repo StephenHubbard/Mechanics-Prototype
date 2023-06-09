@@ -10,9 +10,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private LayerMask _collisionLayers;
 
     private bool _isInitialized = false;
+    private Vector2 _fireDirection;
+    private Vector2 _previousPosition;
 
     private Rigidbody2D _rb;
-    private Vector2 _previousPosition;
     private Gun _gun;
 
     private void Awake()
@@ -33,7 +34,9 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        transform.SetPositionAndRotation(_gun.BulletSpawnPoint.position, _gun.transform.rotation);
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _fireDirection = (mousePosition - (Vector2)_gun.BulletSpawnPoint.position).normalized;
+        transform.position = _gun.BulletSpawnPoint.position;
         _previousPosition = transform.position;
         _isInitialized = true;
     }
@@ -44,8 +47,7 @@ public class Bullet : MonoBehaviour
 
     private void MoveProjectile()
     {
-        Vector2 direction = transform.right;
-        _rb.velocity = direction * _moveSpeed;
+        _rb.velocity = _fireDirection * _moveSpeed;
     }
 
     // continous rb2d detection doesn't work on static tilemap if tilemap also has rb.  Tilemap needs it for composite collider2d.
@@ -67,13 +69,17 @@ public class Bullet : MonoBehaviour
             }
 
             Health health = hit.collider.gameObject.GetComponent<Health>();
-            health?.TakeDamage();
+            health?.TakeDamage(1);
 
             Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
             knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
 
-            _previousPosition = _rb.position;
-            _gun.ReleaseBulletFromPool(this);
+            if (MechanicsManager.Instance.ObjectPoolingToggle) {
+                _gun.ReleaseBulletFromPool(this);
+            } else {
+                Destroy(gameObject);
+            }
+
             return;
         }
 

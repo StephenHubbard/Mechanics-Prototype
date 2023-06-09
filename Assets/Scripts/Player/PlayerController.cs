@@ -19,6 +19,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private float _coyoteTime = 0.2f;
+    [SerializeField] private SpriteRenderer _jetPackSpriteRenderer;
     
     private Quaternion _targetTiltRotation;
     private Vector2 _moveDir;
@@ -28,6 +29,7 @@ public class PlayerController : Singleton<PlayerController>
     private PlayerInput _playerInput;
     private Knockback _knockBack;
     private bool _jumping, _dashing;
+    private Sound _sound;
 
     protected override void Awake() {
         base.Awake();
@@ -36,12 +38,21 @@ public class PlayerController : Singleton<PlayerController>
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
+        _sound = GetComponent<Sound>();
     }
 
     private void Start() {
         _jumping = false;
         _dashing = false;
         _lastDash = -_dashCD;
+    }
+
+    private void OnEnable() {
+        _jetPackSpriteRenderer.enabled = true;
+    }
+
+    private void OnDisable() {
+        _jetPackSpriteRenderer.enabled = false;
     }
 
     private void Update()
@@ -109,7 +120,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Jump()
     {
-        if (!CheckGrounded() && !FrameInput.JumpHeld)
+        if (!CheckGrounded())
         {
             _rb.AddForce(new Vector2(0, -_extraGravity * Time.deltaTime));
         }
@@ -136,7 +147,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             _dashing = true;
             _trailRenderer.enabled = true;
-
+            _sound.PlaySound();
             Vector2 direction = _rb.velocity.normalized;
 
             _rb.velocity = direction * _dashSpeed;

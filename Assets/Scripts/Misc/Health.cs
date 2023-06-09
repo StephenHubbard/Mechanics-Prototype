@@ -11,16 +11,26 @@ public class Health : MonoBehaviour
     private bool _canTakeDamageCD = true;
     private int _currentHealth;
     private Knockback _knockBack;
+    private EnemySpawner _enemySpawner;
+    private EnemyMovement _enemyMovement;
 
     private void Awake() {
-        _currentHealth = _startingHealth;
         _knockBack = GetComponent<Knockback>();
+        _enemyMovement = GetComponent<EnemyMovement>();
     }
 
-    public void TakeDamage() {
+    private void OnEnable() {
+        _currentHealth = _startingHealth;
+    }
+
+    public void EnemyInit(EnemySpawner enemySpawner) {
+        _enemySpawner = enemySpawner;
+    }
+
+    public void TakeDamage(int amount) {
         if (!_canTakeDamageCD) { return; }
         
-        _currentHealth--;
+        _currentHealth -= amount;
         _canTakeDamageCD = false;
         StartCoroutine(DetectDeath());
     }
@@ -30,13 +40,22 @@ public class Health : MonoBehaviour
             _canTakeDamageCD = true;
         }
 
-        yield return new WaitForSeconds(_knockBack.KnockBackTime);
+        if (_isPlayer && _currentHealth > 0) {
+            yield return new WaitForSeconds(_knockBack.KnockBackTime);
+        } else {
+            yield return null;
+        }
 
         if (_currentHealth <= 0) {
             if (MechanicsManager.Instance.HitFeedbackToggle) {
                 Instantiate(_deathVFX, transform.position, Quaternion.identity);
             }
-            Destroy(gameObject);
+
+            if (MechanicsManager.Instance.ObjectPoolingToggle && _enemySpawner != null) {
+                _enemySpawner.ReleaseEnemyFromPool(_enemyMovement);
+            } else {
+                Destroy(gameObject);
+            }
         } else {
             _canTakeDamageCD = true;
         }
@@ -46,7 +65,7 @@ public class Health : MonoBehaviour
         EnemyMovement enemy = other.gameObject.GetComponent<EnemyMovement>();
 
         if (_isPlayer && enemy) {
-            TakeDamage();
+            TakeDamage(1);
 
             if (MechanicsManager.Instance.HitFeedbackToggle)
             {
