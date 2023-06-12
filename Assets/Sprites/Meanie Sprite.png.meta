@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 73ddc00d8ec47db4e8afff42cd48fd89
+guid: a5ce647bba00d10478db5bfe55d4ea9d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -136,12 +136,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pipe_0
+      name: Meanie Sprite_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -150,19 +150,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d54a4745be2c6145aba7ad087a23b44
-      internalID: -1645034967
+      spriteID: 7a77ca8ba06084440b990a4782186c56
+      internalID: 2036009985
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pipe_1
+      name: Meanie Sprite_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 32
         y: 0
-        width: 48
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -171,8 +171,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b58bbd45048523f41a3325569ab9119c
-      internalID: 519868899
+      spriteID: fb92249ba18ce96408048af77f778d2e
+      internalID: -1801902234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meanie Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b477d20490d031941a882e185294a1ad
+      internalID: 438118342
       vertices: []
       indices: 
       edges: []
@@ -188,8 +209,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Pipe_0: -1645034967
-      Pipe_1: 519868899
+      Meanie Sprite_0: 2036009985
+      Meanie Sprite_1: -1801902234
+      Meanie Sprite_2: 438118342
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

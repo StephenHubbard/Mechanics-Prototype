@@ -16,12 +16,12 @@ public class Grenade : MonoBehaviour
 
     private Rigidbody2D _rb;
     private CinemachineImpulseSource _impulseSource;
-    private Sound _sound;
+    private Sounds _sound;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody2D>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
-        _sound = GetComponent<Sound>();
+        _sound = GetComponent<Sounds>();
     }
 
     private void Start() {
@@ -37,7 +37,7 @@ public class Grenade : MonoBehaviour
         {
             yield return new WaitForSeconds(_explodeTime / totalBlinks);
             _grenadeLight.SetActive(true);
-            _sound.PlaySound();
+            _sound.PlaySound(0);
             currentBlinks++;
             yield return new WaitForSeconds(.1f);
             _grenadeLight.SetActive(false);

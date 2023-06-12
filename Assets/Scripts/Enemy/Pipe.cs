@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class EnemySpawner : MonoBehaviour
+public class Pipe : MonoBehaviour
 {
     [SerializeField] private EnemyMovement _enemyPrefab;
     [SerializeField] private float _spawnTimer = 3f;
 
     private ObjectPool<EnemyMovement> _enemyPool;
+    private ColorChanger _colorChanger;
 
     private void Awake() {
+        _colorChanger = GetComponent<ColorChanger>();
         CreateEnemyPool();
     }
 
@@ -47,12 +49,16 @@ public class EnemySpawner : MonoBehaviour
                 newEnemy.transform.position = this.transform.position;
                 Health enemyHealth = newEnemy.GetComponent<Health>();
                 enemyHealth.EnemyInit(this);
+                ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
+                newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
             } else {
                 Instantiate(_enemyPrefab, transform.position, transform.rotation);
             }
+
             float randomTimeAdj = Random.Range(-1f, 1);
             float spawnWaitTime = _spawnTimer + randomTimeAdj;
-            if (spawnWaitTime <= 0) {
+            if (spawnWaitTime <= 0)
+            {
                 spawnWaitTime = 0.1f;
             }
             yield return new WaitForSeconds(spawnWaitTime);

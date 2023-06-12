@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 public class MechanicsManager : Singleton<MechanicsManager>
 {
     public bool PlayerControllerToggle => _playerControllerToggle.isOn;
-    public bool GunToggle => _gunToggle.isOn;
+    public bool BetterGunToggle => _betterGunToggle.isOn;
     public bool VFXToggle => _vfxToggle.isOn;
     public bool ScreenShakeToggle => _screenShakeToggle.isOn;
     public bool HitFeedbackToggle => _hitFeedbackToggle.isOn;
@@ -17,7 +17,7 @@ public class MechanicsManager : Singleton<MechanicsManager>
     public bool SFXToggle => _sfxToggle.isOn;
 
     [SerializeField] private Toggle _playerControllerToggle;
-    [SerializeField] private Toggle _gunToggle;
+    [SerializeField] private Toggle _betterGunToggle;
     [SerializeField] private Toggle _vfxToggle;
     [SerializeField] private Toggle _screenShakeToggle;
     [SerializeField] private Toggle _hitFeedbackToggle;
@@ -48,7 +48,7 @@ public class MechanicsManager : Singleton<MechanicsManager>
             ImprovedPlayerController();
         }
 
-        if (_gunToggle.isOn) {
+        if (_betterGunToggle.isOn) {
             BetterGun();
         }
 

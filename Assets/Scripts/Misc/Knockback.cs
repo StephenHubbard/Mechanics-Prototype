@@ -8,20 +8,16 @@ public class Knockback : MonoBehaviour
     public float KnockBackTime => _knockBackTime;
 
     [SerializeField] private float _knockBackTime = .2f;
-    [SerializeField] private Material _whiteFlashMat;
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-
+    
     private Rigidbody2D _rb;
-    private Material defaultMat;
+    private ColorChanger _colorChanger;
+    private Flash _flash;
 
     private void Awake()
     {
+        _flash = GetComponent<Flash>();
+        _colorChanger = GetComponent<ColorChanger>();
         _rb = GetComponent<Rigidbody2D>();
-        defaultMat = _spriteRenderer.material;
-    }
-
-    private void OnEnable() {
-        _spriteRenderer.material = defaultMat;
     }
 
     public void GetKnockedBack(Vector2 damageSource, float knockBackThrust)
@@ -32,7 +28,7 @@ public class Knockback : MonoBehaviour
         Vector2 difference = ((Vector2)transform.position - damageSource).normalized * knockBackThrust * _rb.mass;
         _rb.AddForce(difference, ForceMode2D.Impulse);
         StartCoroutine(KnockRoutine());
-        StartCoroutine(FlashRoutine());
+        StartCoroutine(_flash.FlashRoutine(_knockBackTime));
     }
 
     private IEnumerator KnockRoutine()
@@ -40,12 +36,5 @@ public class Knockback : MonoBehaviour
         yield return new WaitForSeconds(_knockBackTime);
         _rb.velocity = Vector2.zero;
         GettingKnockedBack = false;
-    }
-
-    private IEnumerator FlashRoutine()
-    {
-        _spriteRenderer.material = _whiteFlashMat;
-        yield return new WaitForSeconds(_knockBackTime / 2);
-        _spriteRenderer.material = defaultMat;
     }
 }

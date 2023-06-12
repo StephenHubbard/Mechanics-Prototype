@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 576432436846163381}
   m_Layer: 8
   m_Name: Grenade
-  m_TagString: Untagged
+  m_TagString: Damage Source
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,8 +259,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clips:
   - {fileID: 8300000, guid: 4ea5c73040941fa4db2fb83c34d99006, type: 3}
-  _randomizePitch: 0
-  _pitchRange: 0.1
   _volume: 1
   _pitch: 1
 --- !u!1 &7752283670008688359

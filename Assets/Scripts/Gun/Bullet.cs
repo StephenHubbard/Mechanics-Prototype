@@ -34,11 +34,20 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        _fireDirection = (mousePosition - (Vector2)_gun.BulletSpawnPoint.position).normalized;
-        transform.position = _gun.BulletSpawnPoint.position;
-        _previousPosition = transform.position;
         _isInitialized = true;
+
+        if (MechanicsManager.Instance.BetterGunToggle) {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _fireDirection = (mousePosition - (Vector2)_gun.BulletSpawnPoint.position).normalized;
+            transform.position = _gun.BulletSpawnPoint.position;
+            _previousPosition = transform.position;
+        } else {
+            if (PlayerController.Instance.IsFacingRight()) {
+                _fireDirection = Vector2.right;
+            } else {
+                _fireDirection = Vector2.left;
+            }
+        }
     }
 
     private void OnDisable() {
@@ -71,8 +80,17 @@ public class Bullet : MonoBehaviour
             Health health = hit.collider.gameObject.GetComponent<Health>();
             health?.TakeDamage(1);
 
-            Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
-            knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
+            Pipe pipe = hit.collider.gameObject.GetComponent<Pipe>();
+            if (pipe) {
+                ColorChanger colorChanger = pipe.gameObject.GetComponent<ColorChanger>();
+                colorChanger.SetRandomColor();
+            }
+
+            // player dead null check
+            if (PlayerController.Instance) {
+                Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
+                knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
+            }
 
             if (MechanicsManager.Instance.ObjectPoolingToggle) {
                 _gun.ReleaseBulletFromPool(this);

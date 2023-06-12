@@ -29,7 +29,7 @@ public class PlayerController : Singleton<PlayerController>
     private PlayerInput _playerInput;
     private Knockback _knockBack;
     private bool _jumping, _dashing;
-    private Sound _sound;
+    private Sounds _sound;
 
     protected override void Awake() {
         base.Awake();
@@ -38,7 +38,7 @@ public class PlayerController : Singleton<PlayerController>
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
-        _sound = GetComponent<Sound>();
+        _sound = GetComponent<Sounds>();
     }
 
     private void Start() {
@@ -147,7 +147,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             _dashing = true;
             _trailRenderer.enabled = true;
-            _sound.PlaySound();
+            _sound.PlaySound(0);
             Vector2 direction = _rb.velocity.normalized;
 
             _rb.velocity = direction * _dashSpeed;
@@ -167,7 +167,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void HandleSpriteFlip()
     {
-        if (MechanicsManager.Instance.GunToggle) {
+        if (MechanicsManager.Instance.BetterGunToggle) {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             if (mousePosition.x < transform.position.x)

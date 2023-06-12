@@ -53,20 +53,72 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.curve.scalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.separateAxes
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.y.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.z.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.curve.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: SizeModule.curve.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.6392157
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.6392157
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.9921569
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.atime1
+      value: 53080
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.atime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_NumAlphaKeys
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7882678833386788365, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: m_Name
-      value: Enemy Death VFX
+      value: Meanie Death VFX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
