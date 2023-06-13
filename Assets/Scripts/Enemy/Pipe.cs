@@ -42,18 +42,21 @@ public class Pipe : MonoBehaviour
     }
 
     private IEnumerator SpawnRoutine() {
+        EnemyMovement newEnemy;
+
         while (true)
         {
             if (MechanicsManager.Instance.ObjectPoolingToggle) {
-                EnemyMovement newEnemy = _enemyPool.Get();
+                newEnemy = _enemyPool.Get();
                 newEnemy.transform.position = this.transform.position;
                 Health enemyHealth = newEnemy.GetComponent<Health>();
                 enemyHealth.EnemyInit(this);
-                ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
-                newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
             } else {
-                Instantiate(_enemyPrefab, transform.position, transform.rotation);
+                newEnemy = Instantiate(_enemyPrefab, transform.position, transform.rotation);
             }
+
+            ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
+            newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
 
             float randomTimeAdj = Random.Range(-1f, 1);
             float spawnWaitTime = _spawnTimer + randomTimeAdj;
@@ -61,7 +64,10 @@ public class Pipe : MonoBehaviour
             {
                 spawnWaitTime = 0.1f;
             }
+           
             yield return new WaitForSeconds(spawnWaitTime);
+            _colorChanger.SetRandomColor();
         }
+
     }
 }

@@ -20,7 +20,8 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private float _coyoteTime = 0.2f;
     [SerializeField] private SpriteRenderer _jetPackSpriteRenderer;
-    
+    [SerializeField] private GameObject _visuals;
+
     private Quaternion _targetTiltRotation;
     private Vector2 _moveDir;
     private float _coyoteTimer, _lastDash;
@@ -72,7 +73,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         return transform.eulerAngles.y == 0;
     }
-    
+
     private void GatherInput()
     {
         FrameInput = _playerInput.FrameInput;

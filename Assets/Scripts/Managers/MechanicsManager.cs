@@ -15,6 +15,7 @@ public class MechanicsManager : Singleton<MechanicsManager>
     public bool PlayerAnimationsToggle => _playerAnimationsToggle.isOn;
     public bool ObjectPoolingToggle => _objectPoolingToggle.isOn;
     public bool SFXToggle => _sfxToggle.isOn;
+    public bool DeathFadeToggle => _deathFadeToggle.isOn;
 
     [SerializeField] private Toggle _playerControllerToggle;
     [SerializeField] private Toggle _betterGunToggle;
@@ -25,6 +26,7 @@ public class MechanicsManager : Singleton<MechanicsManager>
     [SerializeField] private Toggle _playerAnimationsToggle;
     [SerializeField] private Toggle _objectPoolingToggle;
     [SerializeField] private Toggle _sfxToggle;
+    [SerializeField] private Toggle _deathFadeToggle;
 
     private BasicPlayerController _basicPlayerController;
     private PlayerController _playerController;
@@ -35,26 +37,31 @@ public class MechanicsManager : Singleton<MechanicsManager>
 
     protected override void Awake() {
         base.Awake();
-
-        _basicPlayerController = FindObjectOfType<BasicPlayerController>();
-        _playerController = FindObjectOfType<PlayerController>();
-        _basicGun = FindObjectOfType<BasicGun>();
-        _gun = FindObjectOfType<Gun>();
+        
         _globalVolume = FindObjectOfType<Volume>();
     }
 
     private void Start() {
+        SetToggles();
+
+        if (_postProcessingToggle.isOn)
+        {
+            PostProccessing();
+        }
+    }
+
+    public void SetToggles() {
+        _basicPlayerController = FindObjectOfType<BasicPlayerController>();
+        _playerController = FindObjectOfType<PlayerController>();
+        _basicGun = FindObjectOfType<BasicGun>();
+        _gun = FindObjectOfType<Gun>();
+
         if (_playerControllerToggle.isOn) {
             ImprovedPlayerController();
         }
 
         if (_betterGunToggle.isOn) {
             BetterGun();
-        }
-
-        if (_postProcessingToggle.isOn)
-        {
-            PostProccessing();
         }
     }
 

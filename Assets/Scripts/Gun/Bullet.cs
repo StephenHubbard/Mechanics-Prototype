@@ -80,12 +80,6 @@ public class Bullet : MonoBehaviour
             Health health = hit.collider.gameObject.GetComponent<Health>();
             health?.TakeDamage(1);
 
-            Pipe pipe = hit.collider.gameObject.GetComponent<Pipe>();
-            if (pipe) {
-                ColorChanger colorChanger = pipe.gameObject.GetComponent<ColorChanger>();
-                colorChanger.SetRandomColor();
-            }
-
             // player dead null check
             if (PlayerController.Instance) {
                 Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();

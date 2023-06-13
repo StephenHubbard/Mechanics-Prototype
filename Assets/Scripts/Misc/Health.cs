@@ -19,11 +19,13 @@ public class Health : MonoBehaviour
     private Pipe _enemySpawner;
     private EnemyMovement _enemyMovement;
     private Sounds _sounds; 
+    private ColorChanger _colorChanger;
 
     private void Awake() {
         _sounds = GetComponent<Sounds>();
         _knockBack = GetComponent<Knockback>();
         _enemyMovement = GetComponent<EnemyMovement>();
+        _colorChanger = GetComponent<ColorChanger>();
     }
 
     private void OnEnable() {
@@ -59,8 +61,14 @@ public class Health : MonoBehaviour
             if (_onDeathSFX) { AudioManager.Instance.PlaySound(_onDeathSFX, deathSplatterMixerGroup, .8f, 1f); }
 
             if (MechanicsManager.Instance.HitFeedbackToggle) {
-                Instantiate(_deathVFX, transform.position, Quaternion.identity);
+                GameObject deathVFX = Instantiate(_deathVFX, transform.position, Quaternion.identity);
+                
+                if (_colorChanger) {
+                    ParticleSystem.MainModule ps = deathVFX.GetComponent<ParticleSystem>().main;
+                    ps.startColor = _colorChanger.CurrentColor;
+                }
             }
+
 
             if (MechanicsManager.Instance.VFXToggle && _deathSplatter) {
                 GameObject newSplatter = Instantiate(_deathSplatter, transform.position, Quaternion.identity);
@@ -74,6 +82,10 @@ public class Health : MonoBehaviour
                 }
             }
 
+            if (_isPlayer) {
+                Fade.Instance.RespawnPlayer();
+            }
+
             if (MechanicsManager.Instance.ObjectPoolingToggle && _enemySpawner != null) {
                 _enemySpawner.ReleaseEnemyFromPool(_enemyMovement);
             } else {
@@ -83,6 +95,7 @@ public class Health : MonoBehaviour
             _canTakeDamageCD = true;
         }
     }
+
 
     private void OnCollisionEnter2D(Collision2D other) {
         EnemyMovement enemy = other.gameObject.GetComponent<EnemyMovement>();
