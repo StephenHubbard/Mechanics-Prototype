@@ -6,6 +6,7 @@ using TMPro;
 
 public class Leaderboard : MonoBehaviour
 {
+    [SerializeField] private bool _activateLeaderBoard = false;
     [SerializeField] private GameObject _leaderboardContainer;
     [SerializeField] private TMP_InputField _playerNameInputField;
     [SerializeField] private TextMeshProUGUI _playerNames;
@@ -15,22 +16,45 @@ public class Leaderboard : MonoBehaviour
 
     const string LEADERBOARD_ID = "mechanicsPrototype";
 
+    // private enum GameState { MenuIdle, LoggingIn, Error, LoggedIn, Play };
+    // private GameState gameState = GameState.MenuIdle;
+
     private void Start()
     {
-        if (_playerNameInputField != null) {
-            _playerNameInputField.characterLimit = 10;
+        if (_activateLeaderBoard) {
+            StartCoroutine(GuestLoginRoutine());
+            StartCoroutine(SetupRoutine());
         }
-        StartCoroutine(SetupRoutine());
     }
 
     public void SubmitButton() {
         StartCoroutine(SubmitButtonRoutine());
     }
 
+    private IEnumerator GuestLoginRoutine()
+    {
+        bool gotResponse = false;
+        LootLockerSDKManager.StartGuestSession((response) =>
+        {
+            if (response.success)
+            {
+                gotResponse = true;
+                // gameState = GameState.LoggedIn;
+            }
+            else
+            {
+                // gameState = GameState.Error;
+                gotResponse = true;
+            }
+        });
+
+        yield return new WaitWhile(() => gotResponse == false);
+    }
+
     private IEnumerator SubmitButtonRoutine() {
         _playerNameInputField.gameObject.SetActive(false);
         yield return SetPlayerName();
-        yield return SubmitScoreRoutine((int)_score.CurrentScore);
+        yield return SubmitScoreRoutine(_score.CurrentScore);
         yield return FetchTopHighScoresRoutine();
     } 
 
@@ -77,6 +101,7 @@ public class Leaderboard : MonoBehaviour
         });
         
         _playerNameInputField.text = "";
+
         yield return new WaitWhile(() => done == false);
     }
 
@@ -106,7 +131,7 @@ public class Leaderboard : MonoBehaviour
                 Debug.Log("Successfully loaded player high scores.");
                 _loadingText.SetActive(false);
             } else {
-                Debug.Log("Failed" + response.Error);
+                Debug.LogErrorFormat("Failed {0}", response.Error);
                 done = true;
             }
         });

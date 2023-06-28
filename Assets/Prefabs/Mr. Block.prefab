@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 704907234823771122}
   - component: {fileID: 1704024836892100988}
   - component: {fileID: 6712051941507026785}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Land Dust VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4892,7 +4892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5056677911235295529}
   - component: {fileID: 8366618704885641147}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Character Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4977,7 +4977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4957389114707841508}
   - component: {fileID: 2287162201510645888}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5024,7 +5024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3608024363948460939}
   - component: {fileID: 5356436813723310071}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Jetpack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5111,7 +5111,7 @@ GameObject:
   - component: {fileID: 1055186682823866797}
   - component: {fileID: 4004403796994823641}
   - component: {fileID: 7597686435235256179}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5256,7 +5256,7 @@ GameObject:
   - component: {fileID: 3094939755077068800}
   - component: {fileID: 889260362431267437}
   - component: {fileID: 3328137075847123116}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Move Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10082,7 +10082,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4771025717490857796}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10115,7 +10115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6321241296963778876}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Bullet Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10147,7 +10147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3974559730490022749}
   - component: {fileID: 2728533948622257519}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Gun Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10231,7 +10231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6644302271864500197}
   - component: {fileID: 498025347950501158}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Trail Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10386,7 +10386,7 @@ GameObject:
   - component: {fileID: 1963876789491989178}
   - component: {fileID: 243459278306155498}
   - component: {fileID: 204040883512947833}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Mr. Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10408,7 +10408,7 @@ Transform:
   - {fileID: 4957389114707841508}
   - {fileID: 6098175444894000029}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6592435842059604156
 MonoBehaviour:
@@ -10463,7 +10463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _playerSpriteRenderer: {fileID: 8366618704885641147}
   _tiltAngle: 10
   _tiltSpeed: 5
@@ -10706,7 +10706,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6098175444894000029}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
