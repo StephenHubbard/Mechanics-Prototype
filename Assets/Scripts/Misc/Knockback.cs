@@ -22,8 +22,6 @@ public class Knockback : MonoBehaviour
 
     public void GetKnockedBack(Vector2 damageSource, float knockBackThrust)
     {
-        if (!MechanicsManager.Instance.HitFeedbackToggle) { return; }
-
         GettingKnockedBack = true;
         Vector2 difference = ((Vector2)transform.position - damageSource).normalized * knockBackThrust * _rb.mass;
         _rb.AddForce(difference, ForceMode2D.Impulse);

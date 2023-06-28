@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
-    static T instance;
-    public static T Instance { get { return instance; } }
+    private static T _instance;
+    public static T Instance { get { return _instance; } }
 
     protected virtual void Awake()
     {
-        if (instance != null && this.gameObject != null)
+        if (_instance != null && this.gameObject != null)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            instance = (T)this;
+            _instance = (T)this;
         }
 
         if (!gameObject.transform.parent)
@@ -24,9 +24,9 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 
     protected virtual void OnDestroy()
     {
-        if (instance == this)
+        if (_instance == this)
         {
-            instance = null;
+            _instance = null;
         }
     }
 }

@@ -46,14 +46,10 @@ public class Pipe : MonoBehaviour
 
         while (true)
         {
-            if (MechanicsManager.Instance.ObjectPoolingToggle) {
-                newEnemy = _enemyPool.Get();
-                newEnemy.transform.position = this.transform.position;
-                Health enemyHealth = newEnemy.GetComponent<Health>();
-                enemyHealth.EnemyInit(this);
-            } else {
-                newEnemy = Instantiate(_enemyPrefab, transform.position, transform.rotation);
-            }
+            newEnemy = _enemyPool.Get();
+            newEnemy.transform.position = this.transform.position;
+            Health enemyHealth = newEnemy.GetComponent<Health>();
+            enemyHealth.EnemyInit(this);
 
             ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
             newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);

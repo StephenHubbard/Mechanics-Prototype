@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
 
-public class Fade : Singleton<Fade>
+public class Fade : MonoBehaviour
 {
     public float FadeTime => _fadeTime;
 
@@ -15,18 +15,13 @@ public class Fade : Singleton<Fade>
     private CinemachineVirtualCamera _cam;
     private IEnumerator fadeRoutine;
 
-    protected override void Awake()
+    public void Awake()
     {
-        base.Awake();
         _cam = FindObjectOfType<CinemachineVirtualCamera>();
     }
 
     public void RespawnPlayer() {
-        if (MechanicsManager.Instance.DeathFadeToggle) {
             FadeToBlackAndRespawn();
-        } else {
-            StartCoroutine(RespawnRoutine());
-        }
     }
 
     public void FadeToBlackAndRespawn()
@@ -72,6 +67,5 @@ public class Fade : Singleton<Fade>
     {
         GameObject player = Instantiate(_playerPrefab, _respawnPoint.position, Quaternion.identity);
         _cam.Follow = player.transform;
-        MechanicsManager.Instance.SetToggles();
     }
 }

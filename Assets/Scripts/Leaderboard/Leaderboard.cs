@@ -4,14 +4,16 @@ using UnityEngine;
 using LootLocker.Requests;
 using TMPro;
 
-public class Leaderboard : Singleton<Leaderboard>
+public class Leaderboard : MonoBehaviour
 {
+    [SerializeField] private GameObject _leaderboardContainer;
     [SerializeField] private TMP_InputField _playerNameInputField;
     [SerializeField] private TextMeshProUGUI _playerNames;
     [SerializeField] private TextMeshProUGUI _playerScores;
     [SerializeField] private GameObject _loadingText;
+    [SerializeField] private Score _score;
 
-    private string _leaderBoardID = "globalHighscore";
+    const string LEADERBOARD_ID = "mechanicsPrototype";
 
     private void Start()
     {
@@ -28,7 +30,7 @@ public class Leaderboard : Singleton<Leaderboard>
     private IEnumerator SubmitButtonRoutine() {
         _playerNameInputField.gameObject.SetActive(false);
         yield return SetPlayerName();
-        // yield return SubmitScoreRoutine(ScoreManager.Instance.CurrentScore);
+        yield return SubmitScoreRoutine((int)_score.CurrentScore);
         yield return FetchTopHighScoresRoutine();
     } 
 
@@ -63,7 +65,7 @@ public class Leaderboard : Singleton<Leaderboard>
         bool done = false;
         string playerID = _playerNameInputField.text;
 
-        LootLockerSDKManager.SubmitScore(playerID, scoreToUpload, _leaderBoardID, (response) => 
+        LootLockerSDKManager.SubmitScore(playerID, scoreToUpload, LEADERBOARD_ID, (response) => 
         {
             if (response.success) {
                 Debug.Log("Successfully uploaded score");
@@ -80,7 +82,7 @@ public class Leaderboard : Singleton<Leaderboard>
 
     private IEnumerator FetchTopHighScoresRoutine() {
         bool done = false;
-        LootLockerSDKManager.GetScoreList(_leaderBoardID, 7, 0, (response) => {
+        LootLockerSDKManager.GetScoreList(LEADERBOARD_ID, 10, 0, (response) => {
             if (response.success) {
                 string tempPlayerNames = "Names\n";
                 string tempPlayerScores = "Scores\n";

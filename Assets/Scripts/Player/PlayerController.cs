@@ -168,29 +168,16 @@ public class PlayerController : Singleton<PlayerController>
 
     private void HandleSpriteFlip()
     {
-        if (MechanicsManager.Instance.BetterGunToggle) {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            if (mousePosition.x < transform.position.x)
-            {
-                transform.eulerAngles = new Vector3(0f, -180f, 0f);
-            }
-            else
-            {
-                transform.eulerAngles = new Vector3(0f, 0f, 0f);
-            }
-        } else {
-            if (MoveInput.x < 0)
-            {
-                transform.eulerAngles = new Vector3(0f, -180f, 0f);
-            }
-            else if (MoveInput.x > 0)
-            {
-                transform.eulerAngles = new Vector3(0f, 0f, 0f);
-            }
+        if (mousePosition.x < transform.position.x)
+        {
+            transform.eulerAngles = new Vector3(0f, -180f, 0f);
         }
-    }
-
-   
-
+        else
+        {
+            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+        }
+    } 
+    
 }

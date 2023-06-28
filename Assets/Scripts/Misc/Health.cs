@@ -20,12 +20,18 @@ public class Health : MonoBehaviour
     private EnemyMovement _enemyMovement;
     private Sounds _sounds; 
     private ColorChanger _colorChanger;
+    private SplatterParent _splatterParent;
+    private Fade _fade;
+    private Score _score;
 
     private void Awake() {
         _sounds = GetComponent<Sounds>();
         _knockBack = GetComponent<Knockback>();
         _enemyMovement = GetComponent<EnemyMovement>();
         _colorChanger = GetComponent<ColorChanger>();
+        _splatterParent = FindObjectOfType<SplatterParent>();
+        _fade = FindObjectOfType<Fade>();
+        _score = FindObjectOfType<Score>();
     }
 
     private void OnEnable() {
@@ -60,34 +66,30 @@ public class Health : MonoBehaviour
         if (_currentHealth <= 0) {
             if (_onDeathSFX) { AudioManager.Instance.PlaySound(_onDeathSFX, deathSplatterMixerGroup, .8f, 1f); }
 
-            if (MechanicsManager.Instance.HitFeedbackToggle) {
-                GameObject deathVFX = Instantiate(_deathVFX, transform.position, Quaternion.identity);
-                
-                if (_colorChanger) {
-                    ParticleSystem.MainModule ps = deathVFX.GetComponent<ParticleSystem>().main;
-                    ps.startColor = _colorChanger.CurrentColor;
-                }
+            GameObject deathVFX = Instantiate(_deathVFX, transform.position, Quaternion.identity);
+            
+            if (_colorChanger) {
+                ParticleSystem.MainModule ps = deathVFX.GetComponent<ParticleSystem>().main;
+                ps.startColor = _colorChanger.CurrentColor;
             }
 
+            GameObject newSplatter = Instantiate(_deathSplatter, transform.position, Quaternion.identity);
+            Transform parentTransform = _splatterParent.transform;
+            newSplatter.transform.SetParent(parentTransform);
+            SpriteRenderer splatterSpriteRenderer = newSplatter.GetComponent<SpriteRenderer>();
+            ColorChanger colorChanger = GetComponent<ColorChanger>();
 
-            if (MechanicsManager.Instance.VFXToggle && _deathSplatter) {
-                GameObject newSplatter = Instantiate(_deathSplatter, transform.position, Quaternion.identity);
-                Transform parentTransform = SplatterParent.Instance.transform;
-                newSplatter.transform.SetParent(parentTransform);
-                SpriteRenderer splatterSpriteRenderer = newSplatter.GetComponent<SpriteRenderer>();
-                ColorChanger colorChanger = GetComponent<ColorChanger>();
-
-                if (colorChanger) {
-                    splatterSpriteRenderer.color = colorChanger.CurrentColor;
-                }
+            if (colorChanger) {
+                splatterSpriteRenderer.color = colorChanger.CurrentColor;
             }
 
             if (_isPlayer) {
-                Fade.Instance.RespawnPlayer();
+                _fade.RespawnPlayer();
             }
 
-            if (MechanicsManager.Instance.ObjectPoolingToggle && _enemySpawner != null) {
+            if (_enemySpawner != null) {
                 _enemySpawner.ReleaseEnemyFromPool(_enemyMovement);
+                _score.EnemyKilled();
             } else {
                 Destroy(gameObject);
             }
@@ -103,13 +105,10 @@ public class Health : MonoBehaviour
         if (_isPlayer && enemy) {
             TakeDamage(1);
 
-            if (MechanicsManager.Instance.HitFeedbackToggle)
-            {
-                PlayerAnimations playerAnimations = GetComponent<PlayerAnimations>();
+            PlayerAnimations playerAnimations = GetComponent<PlayerAnimations>();
 
-                _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
-                playerAnimations.ScreenShake();
-            }
+            _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
+            playerAnimations.ScreenShake();
         }
     }
 }

@@ -36,21 +36,15 @@ public class Bullet : MonoBehaviour
     {
         _isInitialized = true;
 
-        if (MechanicsManager.Instance.BetterGunToggle) {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            _fireDirection = (mousePosition - (Vector2)_gun.BulletSpawnPoint.position).normalized;
-            transform.position = _gun.BulletSpawnPoint.position;
-            _previousPosition = transform.position;
-        } else {
-            if (PlayerController.Instance.IsFacingRight()) {
-                _fireDirection = Vector2.right;
-            } else {
-                _fireDirection = Vector2.left;
-            }
-        }
+        Vector2 bulletSpawnPosition = _gun.BulletSpawnPoint.position;
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _fireDirection = (mousePosition - bulletSpawnPosition).normalized;
+        transform.position = bulletSpawnPosition;
+        _previousPosition = transform.position;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         _isInitialized = false;
     }
 
@@ -72,10 +66,7 @@ public class Bullet : MonoBehaviour
 
         if (hit.collider != null)
         {
-            if (MechanicsManager.Instance.VFXToggle)
-            {
-                Instantiate(_hitVFX, hit.point, Quaternion.identity);
-            }
+            Instantiate(_hitVFX, hit.point, Quaternion.identity);
 
             Health health = hit.collider.gameObject.GetComponent<Health>();
             health?.TakeDamage(1);
@@ -86,11 +77,7 @@ public class Bullet : MonoBehaviour
                 knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
             }
 
-            if (MechanicsManager.Instance.ObjectPoolingToggle) {
-                _gun.ReleaseBulletFromPool(this);
-            } else {
-                Destroy(gameObject);
-            }
+            _gun.ReleaseBulletFromPool(this);
 
             return;
         }

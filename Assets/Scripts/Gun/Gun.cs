@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Cinemachine;
 using UnityEngine.Pool;
 
@@ -41,7 +40,7 @@ public class Gun : MonoBehaviour
     }
 
     private void Update() {
-        if (EventSystem.current.IsPointerOverGameObject()) { return; }
+        if (Utils.IsOverUI()) { return; }
 
         FrameInput = _playerInput.FrameInput;
 
@@ -100,22 +99,10 @@ public class Gun : MonoBehaviour
     {
         if (FrameInput.AttackHeld)
         {
-            if (MechanicsManager.Instance.ObjectPoolingToggle)
-            {
-                Bullet newBullet = _bulletPool.Get();
-            }
-            else
-            {
-                Bullet newBullet = Instantiate(_bulletPrefab);
-            }
-
+            Bullet newBullet = _bulletPool.Get();
             _animator.Play(FIRE_HASH, 0, 0);
             _lastFireTime = Time.time;
-
-            if (MechanicsManager.Instance.ScreenShakeToggle)
-            {
-                _fireImpulseSource.GenerateImpulse();
-            }
+            _fireImpulseSource.GenerateImpulse();
         }
     }
 

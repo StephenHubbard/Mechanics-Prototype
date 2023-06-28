@@ -24,7 +24,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerController _playerController;
     private CinemachineImpulseSource _impulseSource;
 
-    private void Awake() {
+    public void Awake() {
         _playerInput = GetComponent<PlayerInput>();
         _rb = GetComponent<Rigidbody2D>();
         _playerController = GetComponent<PlayerController>();
@@ -32,8 +32,6 @@ public class PlayerAnimations : MonoBehaviour
     }
 
     private void Update() {
-        if (!MechanicsManager.Instance.PlayerAnimationsToggle) { return; }
-
         GatherInput();
         ApplyTilt();
         DetectMoveEffect();
@@ -45,8 +43,6 @@ public class PlayerAnimations : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!MechanicsManager.Instance.PlayerAnimationsToggle) { return; }
-
         string groundString = "Ground";
 
         if (other.gameObject.CompareTag(groundString) && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
@@ -58,6 +54,13 @@ public class PlayerAnimations : MonoBehaviour
 
     public void ScreenShake() {
         _impulseSource.GenerateImpulse();
+    }
+
+    public void MoveDustOff() {
+        if (_moveDustVFX.isPlaying)
+        {
+            _moveDustVFX.Stop();
+        }
     }
 
     private void DetectMoveEffect() {

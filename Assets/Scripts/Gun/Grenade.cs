@@ -81,9 +81,7 @@ public class Grenade : MonoBehaviour
             float shakeIntensity = Mathf.Clamp(1f / distanceToPlayer, 0.05f, 1f);
             Vector3 explosionVelocity = new Vector3(5f * shakeIntensity, 3f * shakeIntensity, 0f);
             _impulseSource.GenerateImpulseAt(transform.position, explosionVelocity);
-        } else {
-            _impulseSource.GenerateImpulse(); 
-        }
+        } 
 
         Destroy(gameObject);
     }
