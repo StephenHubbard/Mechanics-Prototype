@@ -31,6 +31,9 @@ public class PlayerController : Singleton<PlayerController>
     private Knockback _knockBack;
     private bool _jumping, _dashing;
     private Sounds _sound;
+    private Fade _fade;
+    private Health _health;
+    private PlayerAnimations _playerAnimations;
 
     protected override void Awake() {
         base.Awake();
@@ -40,6 +43,9 @@ public class PlayerController : Singleton<PlayerController>
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
         _sound = GetComponent<Sounds>();
+        _fade = FindObjectOfType<Fade>();
+        _health = GetComponent<Health>();
+        _playerAnimations = GetComponent<PlayerAnimations>();
     }
 
     private void Start() {
@@ -69,9 +75,27 @@ public class PlayerController : Singleton<PlayerController>
         Movement();
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        EnemyMovement enemy = other.gameObject.GetComponent<EnemyMovement>();
+
+        if (enemy)
+        {
+            int enemyDamageAmount = 1;
+            _health.TakeDamage(enemyDamageAmount);
+            _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
+            _playerAnimations.ScreenShake();
+        }
+    }
+
     public bool IsFacingRight()
     {
         return transform.eulerAngles.y == 0;
+    }
+
+    public void PlayerDeath() {
+        _fade.RespawnPlayer();
+        Destroy(gameObject);
     }
 
     private void GatherInput()

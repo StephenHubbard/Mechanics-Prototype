@@ -48,14 +48,15 @@ public class Pipe : MonoBehaviour
         {
             newEnemy = _enemyPool.Get();
             newEnemy.transform.position = this.transform.position;
+
             Health enemyHealth = newEnemy.GetComponent<Health>();
             enemyHealth.EnemyInit(this);
 
             ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
             newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
 
-            float randomTimeAdj = Random.Range(-1f, 1);
-            float spawnWaitTime = _spawnTimer + randomTimeAdj;
+            float randomTimeModifier = Random.Range(-1f, 1);
+            float spawnWaitTime = _spawnTimer + randomTimeModifier;
             if (spawnWaitTime <= 0)
             {
                 spawnWaitTime = 0.1f;

@@ -8,31 +8,39 @@ public class Fade : MonoBehaviour
     public float FadeTime => _fadeTime;
 
     [SerializeField] private float _fadeTime = 2f;
-    [SerializeField] private Image _imageToFade;
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private Transform _respawnPoint;
 
-    private CinemachineVirtualCamera _cam;
+    private Image _imageToFade;
+    private CinemachineVirtualCamera _virtualCam;
     private IEnumerator fadeRoutine;
 
     public void Awake()
     {
-        _cam = FindObjectOfType<CinemachineVirtualCamera>();
+        _imageToFade = GetComponent<Image>();
+        _virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
     }
 
     public void RespawnPlayer() {
-            FadeToBlackAndRespawn();
+        FadeIn();
     }
 
-    public void FadeToBlackAndRespawn()
+    public void FadeIn()
     {
         if (fadeRoutine != null)
         {
             StopCoroutine(fadeRoutine);
         }
 
-        fadeRoutine = FadeRoutineAndRespawn(1f);
+        fadeRoutine = FadeOut(1f);
         StartCoroutine(fadeRoutine);
+    }
+
+    private IEnumerator FadeOut(float targetAlpha)
+    {
+        yield return FadeRoutine(targetAlpha);
+        Respawn();
+        yield return FadeRoutine(0f);
     }
 
     private IEnumerator FadeRoutine(float targetAlpha)
@@ -51,21 +59,9 @@ public class Fade : MonoBehaviour
         _imageToFade.color = new Color(_imageToFade.color.r, _imageToFade.color.g, _imageToFade.color.b, targetAlpha);
     }
 
-    private IEnumerator FadeRoutineAndRespawn(float targetAlpha)
-    {
-        yield return FadeRoutine(targetAlpha);
-        Respawn();
-        yield return FadeRoutine(0f);
-    }
-
-    private IEnumerator RespawnRoutine() {
-        yield return null;
-        Respawn();
-    }
-
     private void Respawn()
     {
         GameObject player = Instantiate(_playerPrefab, _respawnPoint.position, Quaternion.identity);
-        _cam.Follow = player.transform;
+        _virtualCam.Follow = player.transform;
     }
 }

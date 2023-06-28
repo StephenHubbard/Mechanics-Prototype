@@ -9,6 +9,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public Vector2 MoveInput => FrameInput.Move;
 
+    [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private SpriteRenderer _playerSpriteRenderer;
     [SerializeField] private float _tiltAngle = 10f;    
     [SerializeField] private float _tiltSpeed = 5f;
@@ -43,9 +44,7 @@ public class PlayerAnimations : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        string groundString = "Ground";
-
-        if (other.gameObject.CompareTag(groundString) && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
+        if (other.gameObject.layer == _groundLayer.value && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
         {
             _landDustVFX.Play();
             ScreenShake();

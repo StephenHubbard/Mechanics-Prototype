@@ -15,6 +15,6 @@ public class Sounds : MonoBehaviour
     [ContextMenu("Play Sound")]
     public void PlaySound(int soundToPlay)
     {
-        AudioManager.Instance.PlaySound(_clips[soundToPlay], null, _volume, _pitch);
+        AudioManager.Instance.PlaySound(_clips[soundToPlay], _volume, _pitch);
     }
 }

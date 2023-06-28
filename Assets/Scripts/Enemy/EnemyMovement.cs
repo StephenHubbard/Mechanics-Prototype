@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float _knockBackThrust = 5f;
     [SerializeField] private float _jumpForce = 5f; 
     [SerializeField] private float _jumpInterval = 5f; 
+    [SerializeField] private float _startMoveDelay = 0.4f;
 
     private Rigidbody2D _rb;
     private Knockback _knockback;
@@ -22,10 +23,10 @@ public class EnemyMovement : MonoBehaviour
         _knockback = GetComponent<Knockback>();
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
-        float startMoveDelay = .4f;
-        Invoke("StartMoving", startMoveDelay);
+        yield return new WaitForSeconds(_startMoveDelay);
+        StartMoving();
     }
 
     private void Update()

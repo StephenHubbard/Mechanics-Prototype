@@ -10461,6 +10461,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99332b40028cb1543952cfa80cdfe95f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   _playerSpriteRenderer: {fileID: 8366618704885641147}
   _tiltAngle: 10
   _tiltSpeed: 5
@@ -10492,12 +10495,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e652642db6260344cb636626629dc1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlayer: 1
   _startingHealth: 3
   _deathVFX: {fileID: 9043520364607239206, guid: a03a587b9fbdfc54d9e9f93ae5e49075, type: 3}
   _onHitSFX: {fileID: 8300000, guid: be24081d30a35384883bc547431ed946, type: 3}
   _onDeathSFX: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
-  deathSplatterMixerGroup: {fileID: -1117884608176067784, guid: 4382e7cb3b854e248a101f6f388f4f75, type: 2}
   _deathSplatter: {fileID: 7427313218258082144, guid: ad84798e471856c40bb1b5deb0bb6feb, type: 3}
 --- !u!70 &2721156719454458728
 CapsuleCollider2D:

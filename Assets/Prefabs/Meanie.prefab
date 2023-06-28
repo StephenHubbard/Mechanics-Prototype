@@ -285,12 +285,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e652642db6260344cb636626629dc1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlayer: 0
   _startingHealth: 3
   _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
   _onHitSFX: {fileID: 0}
   _onDeathSFX: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
-  deathSplatterMixerGroup: {fileID: -1117884608176067784, guid: 4382e7cb3b854e248a101f6f388f4f75, type: 2}
   _deathSplatter: {fileID: 7427313218258082144, guid: 6208118a161b4ee4699d1a1b9e43bcbb, type: 3}
 --- !u!114 &2730755534599638069
 MonoBehaviour:
@@ -309,6 +307,7 @@ MonoBehaviour:
   _knockBackThrust: 25
   _jumpForce: 15
   _jumpInterval: 3
+  _startMoveDelay: 0.4
 --- !u!114 &7528953342479262250
 MonoBehaviour:
   m_ObjectHideFlags: 0

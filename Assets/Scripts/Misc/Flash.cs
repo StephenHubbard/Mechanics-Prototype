@@ -25,7 +25,7 @@ public class Flash : MonoBehaviour
         }
     }
 
-    public IEnumerator FlashRoutine(float flashTime)
+    public IEnumerator FlashRoutine(float knockBackTime)
     {
         foreach (SpriteRenderer sr in _spriteRenderers)
         {
@@ -33,7 +33,8 @@ public class Flash : MonoBehaviour
             if (_colorChanger) { _colorChanger.SetFillColorWhite(); }
         }
 
-        yield return new WaitForSeconds(flashTime / 2);
+        float flashTime = knockBackTime / 2f;
+        yield return new WaitForSeconds(flashTime);
 
         foreach (SpriteRenderer sr in _spriteRenderers)
         {

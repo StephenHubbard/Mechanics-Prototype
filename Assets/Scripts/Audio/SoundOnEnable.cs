@@ -23,6 +23,6 @@ public class SoundOnEnable : MonoBehaviour
     public void PlaySound() {
         int randomClip = Random.Range(0, _clips.Length);
         float finalPitch = _randomizePitch ? _pitch + Random.Range(-_pitchRange, _pitchRange) : _pitch;
-        AudioManager.Instance.PlaySound(_clips[randomClip], null, _volume, finalPitch); 
+        AudioManager.Instance.PlaySound(_clips[randomClip], _volume, finalPitch); 
     }
 }

@@ -12,7 +12,7 @@ public class Grenade : MonoBehaviour
     [SerializeField] private float _explodeTime = 3f;
     [SerializeField] private GameObject _grenadeLight;
     [SerializeField] private float _knockBackForce = 20f;
-
+    [SerializeField] private int _damageAmount = 3;
 
     private Rigidbody2D _rb;
     private CinemachineImpulseSource _impulseSource;
@@ -39,7 +39,8 @@ public class Grenade : MonoBehaviour
             _grenadeLight.SetActive(true);
             _sound.PlaySound(0);
             currentBlinks++;
-            yield return new WaitForSeconds(.1f);
+            float lightBlinkTime = .1f;
+            yield return new WaitForSeconds(lightBlinkTime);
             _grenadeLight.SetActive(false);
         }
 
@@ -49,9 +50,7 @@ public class Grenade : MonoBehaviour
     private void LaunchGrenade() {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 directionToMouse = (mousePosition - (Vector2)transform.position).normalized;
-
         _rb.AddForce(directionToMouse * _launchForce, ForceMode2D.Impulse);
-
         float torqueAmount = .2f; 
         _rb.AddTorque(torqueAmount, ForceMode2D.Impulse);
     }
@@ -70,16 +69,26 @@ public class Grenade : MonoBehaviour
         foreach (var hit in hits)
         {
             Health health = hit.GetComponent<Health>();
-            health?.TakeDamage(3);
+            health?.TakeDamage(_damageAmount);
 
-            Knockback knockback = hit.GetComponent<Knockback>();
-            knockback?.GetKnockedBack(this.transform.position, _knockBackForce);
+            if (health && health.CurrentHealth > 0) {
+                Knockback knockback = hit.GetComponent<Knockback>();
+                knockback?.GetKnockedBack(this.transform.position, _knockBackForce);
+            }
         }
 
+        // check if player is dead
         if (PlayerController.Instance != null) {
             float distanceToPlayer = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-            float shakeIntensity = Mathf.Clamp(1f / distanceToPlayer, 0.05f, 1f);
-            Vector3 explosionVelocity = new Vector3(5f * shakeIntensity, 3f * shakeIntensity, 0f);
+            
+            float shakeMin = 0.1f;
+            float shakeMax = 1f;
+            float shakeIntensity = Mathf.Clamp(1f / distanceToPlayer, shakeMin, shakeMax);
+
+            float xMultiplier = 5f;  
+            float yMultiplier = 3f;  
+            Vector2 explosionVelocity = new Vector2(shakeIntensity * xMultiplier, shakeIntensity * yMultiplier);
+
             _impulseSource.GenerateImpulseAt(transform.position, explosionVelocity);
         } 
 

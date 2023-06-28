@@ -8,10 +8,12 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject _hitVFX;
     [SerializeField] private float _knockBackForce = 5f;
     [SerializeField] private LayerMask _collisionLayers;
+    [SerializeField] private int _damageAmount = 1;
 
     private bool _isInitialized = false;
     private Vector2 _fireDirection;
     private Vector2 _previousPosition;
+    private Vector2 _playerPosOnFire; // getting player pos on fire in case player dies while bullet is in air
 
     private Rigidbody2D _rb;
     private Gun _gun;
@@ -35,7 +37,7 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         _isInitialized = true;
-
+        _playerPosOnFire = PlayerController.Instance.transform.position;
         Vector2 bulletSpawnPosition = _gun.BulletSpawnPoint.position;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _fireDirection = (mousePosition - bulletSpawnPosition).normalized;
@@ -69,12 +71,11 @@ public class Bullet : MonoBehaviour
             Instantiate(_hitVFX, hit.point, Quaternion.identity);
 
             Health health = hit.collider.gameObject.GetComponent<Health>();
-            health?.TakeDamage(1);
+            health?.TakeDamage(_damageAmount);
 
-            // player dead null check
-            if (PlayerController.Instance) {
+            if (health && health.CurrentHealth > 0) {
                 Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
-                knockback?.GetKnockedBack(PlayerController.Instance.transform.position, _knockBackForce);
+                knockback?.GetKnockedBack(_playerPosOnFire, _knockBackForce);
             }
 
             _gun.ReleaseBulletFromPool(this);

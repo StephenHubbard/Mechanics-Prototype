@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dash",
+                    "name": "Jetpack",
                     "type": "Button",
                     "id": "2fdf8494-e5b9-42b9-b786-bacc9510d2b6",
                     "expectedControlType": "Button",
@@ -45,15 +45,6 @@
                     "name": "Grenade",
                     "type": "Button",
                     "id": "ac343a52-696d-42d7-8bfb-575c413ca464",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Use",
-                    "type": "Button",
-                    "id": "39728fb5-5fd1-4b20-9ba8-91ee60e68a18",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -145,7 +136,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
+                    "action": "Jetpack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -157,17 +148,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Grenade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c79748a8-da1b-4aaa-94a3-f75c6804e4d0",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
