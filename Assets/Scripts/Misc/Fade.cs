@@ -21,10 +21,6 @@ public class Fade : MonoBehaviour
         _virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
     }
 
-    public void RespawnPlayer() {
-        FadeIn();
-    }
-
     public void FadeIn()
     {
         if (fadeRoutine != null)

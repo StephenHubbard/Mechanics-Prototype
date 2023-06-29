@@ -10439,7 +10439,6 @@ MonoBehaviour:
   _dashTime: 0.12
   _dashCD: 0.8
   _jumpStrength: 10
-  _maxFallSpeed: -40
   _extraGravity: 500
   _groundLayer:
     serializedVersion: 2
@@ -10498,7 +10497,6 @@ MonoBehaviour:
   _startingHealth: 3
   _deathVFX: {fileID: 9043520364607239206, guid: a03a587b9fbdfc54d9e9f93ae5e49075, type: 3}
   _onHitSFX: {fileID: 8300000, guid: be24081d30a35384883bc547431ed946, type: 3}
-  _onDeathSFX: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
   _deathSplatter: {fileID: 7427313218258082144, guid: ad84798e471856c40bb1b5deb0bb6feb, type: 3}
 --- !u!70 &2721156719454458728
 CapsuleCollider2D:

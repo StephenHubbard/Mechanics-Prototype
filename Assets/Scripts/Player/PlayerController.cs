@@ -13,7 +13,6 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _dashTime = .7f;
     [SerializeField] private float _dashCD = 2f;
     [SerializeField] private float _jumpStrength;
-    [SerializeField] private float _maxFallSpeed = -10f;
     [SerializeField] private float _extraGravity = 50f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _feetTransform;
@@ -94,7 +93,7 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     public void PlayerDeath() {
-        _fade.RespawnPlayer();
+        _fade.FadeIn();
         Destroy(gameObject);
     }
 
@@ -109,25 +108,11 @@ public class PlayerController : Singleton<PlayerController>
 
         Vector2 newVelocity = new Vector2(_moveDir.x * _moveSpeed, _rb.velocity.y);
         _rb.velocity = newVelocity;
-
-        if (_rb.velocity.y < _maxFallSpeed)
-        {
-            // come back to
-            Debug.Log("max fall speed");
-            _rb.velocity = new Vector2(_rb.velocity.x, _maxFallSpeed);
-        }
     }
 
     private void CoyoteTimer()
     {
-        if (CheckGrounded())
-        {
-            _coyoteTimer = _coyoteTime;
-        }
-        else
-        {
-            _coyoteTimer -= Time.deltaTime;
-        }
+        _coyoteTimer = CheckGrounded() ? _coyoteTime : _coyoteTimer - Time.deltaTime;
     }
 
     public Collider2D CheckGrounded() {
@@ -174,9 +159,7 @@ public class PlayerController : Singleton<PlayerController>
             _trailRenderer.enabled = true;
             _sound.PlaySound(0);
             Vector2 direction = _rb.velocity.normalized;
-
             _rb.velocity = direction * _dashSpeed;
-
             _lastDash = Time.time;
             StartCoroutine(DashRoutine());
         }

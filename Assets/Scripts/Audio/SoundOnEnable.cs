@@ -19,7 +19,6 @@ public class SoundOnEnable : MonoBehaviour
         PlaySound(); 
     }
 
-    [ContextMenu("Play Sound")]
     public void PlaySound() {
         int randomClip = Random.Range(0, _clips.Length);
         float finalPitch = _randomizePitch ? _pitch + Random.Range(-_pitchRange, _pitchRange) : _pitch;

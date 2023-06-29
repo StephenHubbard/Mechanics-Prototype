@@ -296,7 +296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &496326373
 Transform:
   m_ObjectHideFlags: 0
@@ -694,7 +694,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.51754
-  m_Pitch: 1.8705456
+  m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -788,7 +788,7 @@ GameObject:
   - component: {fileID: 814477332}
   - component: {fileID: 814477333}
   - component: {fileID: 814477334}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Player Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5325,6 +5325,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _masterVolume: 0.452
   _sfxSource: {fileID: 797435948}
+  _groupDeathSFX: {fileID: 8300000, guid: 7b376744f024d6a4cb399960b9369f89, type: 3}
+  _onEnemyDeathSFX: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
 --- !u!4 &2011273886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3371729156538349952, guid: 0bb1c8de00aafd9499c2a82cda8ec4b9, type: 3}

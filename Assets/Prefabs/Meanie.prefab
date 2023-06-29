@@ -288,7 +288,6 @@ MonoBehaviour:
   _startingHealth: 3
   _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
   _onHitSFX: {fileID: 0}
-  _onDeathSFX: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
   _deathSplatter: {fileID: 7427313218258082144, guid: 6208118a161b4ee4699d1a1b9e43bcbb, type: 3}
 --- !u!114 &2730755534599638069
 MonoBehaviour:

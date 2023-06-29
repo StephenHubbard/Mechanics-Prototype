@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6361445322417138091}
   - component: {fileID: -3991807119572038744}
   - component: {fileID: 576432436846163381}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Grenade
   m_TagString: Damage Source
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 143726270023063064}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6166478585952580802
 SpriteRenderer:
@@ -167,13 +167,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactLater:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 192
   _explodeVFX: {fileID: 2408165140139399364, guid: a914a045b3dc82f41baab3757d49b6ba, type: 3}
   _explodeRadius: 3.5
   _launchForce: 15
   _explodeTime: 3
   _grenadeLight: {fileID: 7752283670008688359}
   _knockBackForce: 20
+  _damageAmount: 3
 --- !u!114 &6361445322417138091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +245,7 @@ MonoBehaviour:
   _randomizePitch: 1
   _pitchRange: 0.1
   _volume: 1.145
-  _pitch: 1.818
+  _pitch: 1.657
 --- !u!114 &576432436846163381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 143726270023063064}
   - component: {fileID: 3740730439396029647}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Grenade Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

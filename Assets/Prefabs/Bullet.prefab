@@ -141,6 +141,7 @@ MonoBehaviour:
   _collisionLayers:
     serializedVersion: 2
     m_Bits: 127
+  _damageAmount: 1
 --- !u!50 &6433746802972306475
 Rigidbody2D:
   serializedVersion: 4
