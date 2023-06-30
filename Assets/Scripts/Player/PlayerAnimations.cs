@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class PlayerAnimations : MonoBehaviour
 {
-    protected FrameInput FrameInput;
+    private FrameInput FrameInput;
 
     public Vector2 MoveInput => FrameInput.Move;
 

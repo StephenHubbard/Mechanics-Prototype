@@ -5,10 +5,10 @@ using UnityEngine.Pool;
 
 public class Pipe : MonoBehaviour
 {
-    [SerializeField] private EnemyMovement _enemyPrefab;
+    [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private float _spawnTimer = 3f;
 
-    private ObjectPool<EnemyMovement> _enemyPool;
+    private ObjectPool<Enemy> _enemyPool;
     private ColorChanger _colorChanger;
 
     private void Awake() {
@@ -20,13 +20,13 @@ public class Pipe : MonoBehaviour
         StartCoroutine(SpawnRoutine());
     }
 
-    public void ReleaseEnemyFromPool(EnemyMovement enemyMovement) {
+    public void ReleaseEnemyFromPool(Enemy enemyMovement) {
         _enemyPool.Release(enemyMovement);
     }
 
     private void CreateEnemyPool()
     {
-        _enemyPool = new ObjectPool<EnemyMovement>(() =>
+        _enemyPool = new ObjectPool<Enemy>(() =>
         {
             return Instantiate(_enemyPrefab);
         }, enemy =>
@@ -42,7 +42,7 @@ public class Pipe : MonoBehaviour
     }
 
     private IEnumerator SpawnRoutine() {
-        EnemyMovement newEnemy;
+        Enemy newEnemy;
 
         while (true)
         {

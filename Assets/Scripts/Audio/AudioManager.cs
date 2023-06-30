@@ -3,35 +3,127 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioManager : Singleton<AudioManager>
+public class AudioManager : MonoBehaviour
 {
-    [Range(.1f, 1f)]
+    [Range(0, 1f)]
     [SerializeField] private float _masterVolume = .7f;
-    [SerializeField] private AudioSource _sfxSource;
-    [SerializeField] private AudioClip _groupDeathSFX;
-    [SerializeField] private AudioClip _onEnemyDeathSFX;
+    [SerializeField] private float _randomPitchRange = .1f;
+    [SerializeField] private SoundsSO soundSO;
 
     private List<Health> _deadEnemies = new List<Health>();
     private Coroutine _enemyDeathCoroutine;
 
-    public void PlaySound(AudioClip clip, float volume, float pitch)
-    {
-        _sfxSource.pitch = pitch;
-        _sfxSource.volume = volume * _masterVolume;
-        _sfxSource.PlayOneShot(clip, volume);
-    }
-
     private void OnEnable()
     {
-        Health.OnEnemyDeath += HandleEnemyDeath;
+        Health.OnDeath += HandleDeath;
+        Gun.OnShoot += Gun_OnShoot;
+        Gun.OnGrenadeShoot += Gun_OnGrenadeShoot;
+        Grenade.OnBeep += Grenade_OnBeep;
+        Grenade.OnExplode += Grenade_OnExplode;
+        PlayerController.OnPlayerHit += PlayerController_OnPlayerHit;
+        PlayerController.OnJetpack += PlayerController_OnJetpack;
     }
 
-    private void OnDisable()
+    private void OnDisable() {
+        Health.OnDeath -= HandleDeath;
+        Gun.OnShoot -= Gun_OnShoot;
+        Gun.OnGrenadeShoot -= Gun_OnGrenadeShoot;
+        Grenade.OnBeep -= Grenade_OnBeep;
+        Grenade.OnExplode -= Grenade_OnExplode;
+        PlayerController.OnPlayerHit -= PlayerController_OnPlayerHit;
+        PlayerController.OnJetpack -= PlayerController_OnJetpack;
+    }
+
+    #region Sound Methods
+
+    public void SoundToPlay(Sound sound, bool randomizePitch = false) {
+        AudioClip audioClip = sound.clip;
+        if (randomizePitch) { 
+            PlaySoundRandomizePitch(audioClip, transform.position, sound.volume, sound.pitch);
+        } else {
+            PlaySound(audioClip, transform.position, sound.volume, sound.pitch);
+        }
+    }
+
+    public void PlaySoundRandomizePitch(AudioClip audioClip, Vector3 position, float volume = 1f, float pitch = 1f)
     {
-        Health.OnEnemyDeath -= HandleEnemyDeath;
+        float randomPitch = pitch - Random.Range(-_randomPitchRange, _randomPitchRange);
+        PlaySound(audioClip, transform.position, volume, randomPitch);
     }
 
-    private void HandleEnemyDeath(Health enemy)
+    public void PlaySound(AudioClip audioClip, Vector3 position, float volume = 1f, float pitch = 1f)
+    {
+        GameObject soundObject = new GameObject("Temp Audio Source");
+        soundObject.transform.position = position;
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.clip = audioClip;
+        audioSource.volume = volume * _masterVolume;
+        audioSource.pitch = pitch;
+        audioSource.Play();
+        Destroy(soundObject, audioClip.length);
+    }
+
+    #endregion
+
+    #region Sounds
+
+    private void Health_OnDeath(Health sender) {
+        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound, true);
+    }
+
+    private void Gun_OnShoot()
+    {
+        Sound sound = soundSO.GunShoot[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound, true);
+    }
+
+    private void Gun_OnGrenadeShoot()
+    {
+        Sound sound = soundSO.GrenadeShoot[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound, true);
+    }
+
+    private void Grenade_OnBeep()
+    {
+        Sound sound = soundSO.GrenadeBeep[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void Grenade_OnExplode()
+    {
+        Sound sound = soundSO.GrenadeExplosion[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void PlayerController_OnPlayerHit()
+    {
+        Sound sound = soundSO.PlayerHit[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void PlayerController_OnJetpack()
+    {
+        Sound sound = soundSO.Jetpack[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void MegaKill() {
+        Sound sound = soundSO.MegaKill[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void Splatter()
+    {
+        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound, true);
+    }
+        
+    #endregion
+
+    #region Custom SFX Logic
+        
+    private void HandleDeath(Health enemy)
     {
         _deadEnemies.Add(enemy);
 
@@ -43,18 +135,19 @@ public class AudioManager : Singleton<AudioManager>
 
     private IEnumerator EnemyDeathWindowCoroutine()
     {
-        float timeWindow = .05f;
-        yield return new WaitForSeconds(timeWindow); 
+        yield return null;
 
         int megaKillInt = 3;
         if (_deadEnemies.Count >= megaKillInt)
         {
-            PlaySound(_groupDeathSFX, .8f, 1f);
+            MegaKill();
         }
-        
-        PlaySound(_onEnemyDeathSFX, .8f, 1f);
 
+        Splatter();
+        
         _deadEnemies.Clear();
         _enemyDeathCoroutine = null;
     }
+
+    #endregion
 }

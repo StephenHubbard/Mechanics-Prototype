@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using System;
 
 public class Grenade : MonoBehaviour
 {
+    public static Action OnBeep;
+    public static Action OnExplode;
+
     [SerializeField] private LayerMask _interactLater;
     [SerializeField] private GameObject _explodeVFX;
     [SerializeField] private float _explodeRadius = 3.5f;
@@ -16,12 +20,10 @@ public class Grenade : MonoBehaviour
 
     private Rigidbody2D _rb;
     private CinemachineImpulseSource _impulseSource;
-    private Sounds _sound;
 
     private void Awake() {
         _rb = GetComponent<Rigidbody2D>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
-        _sound = GetComponent<Sounds>();
     }
 
     private void Start() {
@@ -37,7 +39,7 @@ public class Grenade : MonoBehaviour
         {
             yield return new WaitForSeconds(_explodeTime / totalBlinks);
             _grenadeLight.SetActive(true);
-            _sound.PlaySound(0);
+            OnBeep?.Invoke();
             currentBlinks++;
             float lightBlinkTime = .1f;
             yield return new WaitForSeconds(lightBlinkTime);
@@ -64,6 +66,7 @@ public class Grenade : MonoBehaviour
     }
 
     private void Explode() {
+        OnExplode?.Invoke();
         Instantiate(_explodeVFX, transform.position, Quaternion.identity);
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _explodeRadius, _interactLater);
         foreach (var hit in hits)

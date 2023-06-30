@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : Singleton<PlayerController>
 {
-    protected FrameInput FrameInput;
-
     public Vector2 MoveInput => FrameInput.Move;
 
-    [SerializeField] private float _moveSpeed;
+    public static Action OnPlayerHit;
+    public static Action OnJetpack;
+
     [SerializeField] private float _dashSpeed;
     [SerializeField] private float _dashTime = .7f;
     [SerializeField] private float _dashCD = 2f;
@@ -21,18 +22,18 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private SpriteRenderer _jetPackSpriteRenderer;
     [SerializeField] private GameObject _visuals;
 
+    private FrameInput FrameInput;
     private Quaternion _targetTiltRotation;
-    private Vector2 _moveDir;
     private float _coyoteTimer, _lastDash;
     private Rigidbody2D _rb;
     private TrailRenderer _trailRenderer;
     private PlayerInput _playerInput;
     private Knockback _knockBack;
-    private bool _jumping, _dashing;
-    private Sounds _sound;
+    private bool _jumping;
     private Fade _fade;
     private Health _health;
     private PlayerAnimations _playerAnimations;
+    private Movement _movement;
 
     protected override void Awake() {
         base.Awake();
@@ -41,15 +42,14 @@ public class PlayerController : Singleton<PlayerController>
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
-        _sound = GetComponent<Sounds>();
         _fade = FindObjectOfType<Fade>();
         _health = GetComponent<Health>();
         _playerAnimations = GetComponent<PlayerAnimations>();
+        _movement = GetComponent<Movement>();
     }
 
     private void Start() {
         _jumping = false;
-        _dashing = false;
         _lastDash = -_dashCD;
     }
 
@@ -67,24 +67,21 @@ public class PlayerController : Singleton<PlayerController>
         HandleSpriteFlip();
         CoyoteTimer();
         Jump();
-        Dash();
-    }
-
-    private void FixedUpdate() {
-        Movement();
+        ExtraGravity();
+        Jetpack();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        EnemyMovement enemy = other.gameObject.GetComponent<EnemyMovement>();
+        Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
-        if (enemy)
-        {
-            int enemyDamageAmount = 1;
-            _health.TakeDamage(enemyDamageAmount);
-            _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
-            _playerAnimations.ScreenShake();
-        }
+        if (!enemy) { return; }
+
+        OnPlayerHit?.Invoke();
+        int enemyDamageAmount = 1;
+        _health.TakeDamage(enemyDamageAmount);
+        _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
+        _playerAnimations.ScreenShake();
     }
 
     public bool IsFacingRight()
@@ -100,14 +97,7 @@ public class PlayerController : Singleton<PlayerController>
     private void GatherInput()
     {
         FrameInput = _playerInput.FrameInput;
-        _moveDir.x = FrameInput.Move.x;
-    }
-
-    private void Movement() {
-        if (_dashing || _knockBack.GettingKnockedBack) { return; }
-
-        Vector2 newVelocity = new Vector2(_moveDir.x * _moveSpeed, _rb.velocity.y);
-        _rb.velocity = newVelocity;
+        _movement.SetCurrentDirection(FrameInput.Move.x);
     }
 
     private void CoyoteTimer()
@@ -130,17 +120,19 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Jump()
     {
-        if (!CheckGrounded())
-        {
-            _rb.AddForce(new Vector2(0, -_extraGravity * Time.deltaTime));
-        }
-
         if (FrameInput.Jump && !_jumping && _coyoteTimer > 0 && CheckGrounded())
         {
             _rb.velocity = Vector2.up * _jumpStrength;
             _coyoteTimer = 0;
             _jumping = true;
             StartCoroutine(JumpCDRoutine());
+        }
+    }
+
+    private void ExtraGravity() {
+        if (!CheckGrounded())
+        {
+            _rb.AddForce(new Vector2(0, -_extraGravity * Time.deltaTime));
         }
     }
 
@@ -151,25 +143,22 @@ public class PlayerController : Singleton<PlayerController>
         _jumping = false;
     }
 
-    private void Dash()
+    private void Jetpack()
     {
         if (FrameInput.Dash && Time.time >= _lastDash + _dashCD)
         {
-            _dashing = true;
+            OnJetpack?.Invoke();
             _trailRenderer.enabled = true;
-            _sound.PlaySound(0);
             Vector2 direction = _rb.velocity.normalized;
             _rb.velocity = direction * _dashSpeed;
             _lastDash = Time.time;
-            StartCoroutine(DashRoutine());
+            StartCoroutine(JetpackRoutine());
         }
     }
 
-    private IEnumerator DashRoutine()
+    private IEnumerator JetpackRoutine()
     {
         yield return new WaitForSeconds(_dashTime);
-        _dashing = false;
-        yield return new WaitForSeconds(.2f);
         _trailRenderer.enabled = false;
     }
 

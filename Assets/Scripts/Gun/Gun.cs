@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.Pool;
+using System;
 
 public class Gun : MonoBehaviour
 {
     public Transform BulletSpawnPoint => _bulletSpawnPoint;
     public bool AttackInput => FrameInput.Attack;
-    
-    protected FrameInput FrameInput;
+
+    public static Action OnShoot;
+    public static Action OnGrenadeShoot;
 
     [SerializeField] private float _gunFireCD = .3f;
     [SerializeField] private float _grenadeThrowCD = 1f;
@@ -18,6 +20,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private Grenade _grenadePrefab;
     [SerializeField] private float _rotationClamp = 60f;
 
+    private FrameInput FrameInput;
     private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
     private ObjectPool<Bullet> _bulletPool;
     private float _lastFireTime = -1; // better to initialize it to -1 than 0 (from chatgpt)
@@ -44,12 +47,12 @@ public class Gun : MonoBehaviour
 
         FrameInput = _playerInput.FrameInput;
 
-        if (Time.time >= _lastFireTime + _gunFireCD)
+        if (FrameInput.AttackHeld && Time.time >= _lastFireTime + _gunFireCD)
         {
             Shoot();
         }
 
-        if (Time.time >= _lastThrowTime + _grenadeThrowCD)
+        if (FrameInput.Grenade && Time.time >= _lastThrowTime + _grenadeThrowCD)
         {
             ThrowGrenade();
         }
@@ -97,20 +100,17 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        if (FrameInput.AttackHeld)
-        {
-            Bullet newBullet = _bulletPool.Get();
-            _animator.Play(FIRE_HASH, 0, 0);
-            _lastFireTime = Time.time;
-            _fireImpulseSource.GenerateImpulse();
-        }
+        OnShoot?.Invoke();
+        Bullet newBullet = _bulletPool.Get();
+        _animator.Play(FIRE_HASH, 0, 0);
+        _lastFireTime = Time.time;
+        _fireImpulseSource.GenerateImpulse();
     }
 
     private void ThrowGrenade() {
-        if (FrameInput.Grenade) {
-            Grenade newGrenade = Instantiate(_grenadePrefab, _bulletSpawnPoint.position, Quaternion.identity);
-            _lastThrowTime = Time.time;
-        }
+        OnGrenadeShoot?.Invoke();
+        Grenade newGrenade = Instantiate(_grenadePrefab, _bulletSpawnPoint.position, Quaternion.identity);
+        _lastThrowTime = Time.time;
     }
 
 }

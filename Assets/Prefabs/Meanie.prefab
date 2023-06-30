@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 7445282496508886752}
   - component: {fileID: 5381035770098392452}
   - component: {fileID: 4979987772040739455}
+  - component: {fileID: -5188165244617546625}
   - component: {fileID: 2730755534599638069}
   - component: {fileID: 7528953342479262250}
   - component: {fileID: 2319657824661375599}
@@ -289,6 +290,19 @@ MonoBehaviour:
   _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
   _onHitSFX: {fileID: 0}
   _deathSplatter: {fileID: 7427313218258082144, guid: 6208118a161b4ee4699d1a1b9e43bcbb, type: 3}
+--- !u!114 &-5188165244617546625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5446767472388699119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e632c661c1b753d418764fd2b945c2e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 3
 --- !u!114 &2730755534599638069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,7 +315,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ff3f121c8ff504ba3f8aac88c4802d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 3
   _changeDirectionTime: 4
   _knockBackThrust: 25
   _jumpForce: 15

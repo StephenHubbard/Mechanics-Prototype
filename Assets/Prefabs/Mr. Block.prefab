@@ -10377,6 +10377,7 @@ GameObject:
   - component: {fileID: 3371729156538349952}
   - component: {fileID: 6592435842059604156}
   - component: {fileID: 720586775680732301}
+  - component: {fileID: 3984436487800704433}
   - component: {fileID: 7869216948761268851}
   - component: {fileID: 2783853223365696113}
   - component: {fileID: 6635349829340476759}
@@ -10384,7 +10385,6 @@ GameObject:
   - component: {fileID: 7467504653331039463}
   - component: {fileID: 11955906504331999}
   - component: {fileID: 1963876789491989178}
-  - component: {fileID: 243459278306155498}
   - component: {fileID: 204040883512947833}
   m_Layer: 7
   m_Name: Mr. Block
@@ -10408,7 +10408,7 @@ Transform:
   - {fileID: 4957389114707841508}
   - {fileID: 6098175444894000029}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6592435842059604156
 MonoBehaviour:
@@ -10434,9 +10434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac92c8116167b104b829fceb3bfadda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 9
   _dashSpeed: 19
-  _dashTime: 0.12
+  _dashTime: 0.3
   _dashCD: 0.8
   _jumpStrength: 10
   _extraGravity: 500
@@ -10448,6 +10447,19 @@ MonoBehaviour:
   _coyoteTime: 0.8
   _jetPackSpriteRenderer: {fileID: 5356436813723310071}
   _visuals: {fileID: 2034445529224776370}
+--- !u!114 &3984436487800704433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627280012559201611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e632c661c1b753d418764fd2b945c2e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 9
 --- !u!114 &7869216948761268851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10666,22 +10678,6 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0.05, y: 0.08, z: 0}
---- !u!114 &243459278306155498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8627280012559201611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 632d9d3b636d1c44786db1e55d8c5c84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _clips:
-  - {fileID: 8300000, guid: 861fee3b64ad7ed4bb4d1b2534ec4e16, type: 3}
-  _volume: 1.255
-  _pitch: 1
 --- !u!114 &204040883512947833
 MonoBehaviour:
   m_ObjectHideFlags: 0

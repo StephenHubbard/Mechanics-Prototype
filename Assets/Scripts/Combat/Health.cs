@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,59 +6,61 @@ using System;
 public class Health : MonoBehaviour
 {
     public int CurrentHealth => _currentHealth;
-    public Action OnDeath;
-    public static Action<Health> OnEnemyDeath;
+
+    public static Action<Health> OnDeath;
 
     [SerializeField] private int _startingHealth = 3;
     [SerializeField] private GameObject _deathVFX;
     [SerializeField] private AudioClip _onHitSFX;
     [SerializeField] private GameObject _deathSplatter;
 
-    // Don't love doing this but I also don't FindObject of type with an empty class so idk. 
-    const string SPLATTER_PARENT = "Splatter Parent";
-
     private int _currentHealth;
     private Knockback _knockBack;
     private Pipe _enemySpawner;
-    private EnemyMovement _enemyMovement;
+    private Enemy _enemyMovement;
     private ColorChanger _colorChanger;
-    private Transform _splatterParent;
     private Score _score;
+    private SplatterParent _splatterParent;
 
     private void Awake() {
         _knockBack = GetComponent<Knockback>();
-        _enemyMovement = GetComponent<EnemyMovement>();
+        _enemyMovement = GetComponent<Enemy>();
         _colorChanger = GetComponent<ColorChanger>();
-        _splatterParent = GameObject.Find(SPLATTER_PARENT).transform;
         _score = FindObjectOfType<Score>();
+        _splatterParent = FindObjectOfType<SplatterParent>();
     }
 
-    private void OnEnable() {
-        _currentHealth = _startingHealth;
-
+    private void OnEnable()
+    {
         OnDeath += DeathFX;
-        OnDeath += DeathSplatter;
+        OnDeath += HandleDeathSplatter;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         OnDeath -= DeathFX;
-        OnDeath -= DeathSplatter;
+        OnDeath -= HandleDeathSplatter;
+    }
+
+    private void HandleDeathSplatter(Health sender) {
+        if (sender != this) { return; }
+
+        _splatterParent.DeathSplatter(transform, _deathSplatter, _colorChanger);
     }
 
     public void EnemyInit(Pipe enemySpawner) {
+        _currentHealth = _startingHealth;
         _enemySpawner = enemySpawner;
     }
 
     public void TakeDamage(int amount) {
-        if (_onHitSFX) { AudioManager.Instance.PlaySound(_onHitSFX, .7f, 1f); }
-        
         _currentHealth -= amount;
 
         if (_currentHealth <= 0) { DetectDeath(); }
     }
 
     private void DetectDeath() {
-        OnDeath?.Invoke();
+        OnDeath?.Invoke(this);
 
         bool isEnemy = _enemySpawner;
 
@@ -66,37 +68,20 @@ public class Health : MonoBehaviour
         {
             _enemySpawner.ReleaseEnemyFromPool(_enemyMovement);
             _score.EnemyKilled();
-            OnEnemyDeath?.Invoke(this);
         }
         else {
             PlayerController.Instance.PlayerDeath();
         }
     }
 
+    private void DeathFX(Health sender) {
+        if (sender != this) { return; }
 
-    private void DeathFX() {
         GameObject deathVFX = Instantiate(_deathVFX, transform.position, Quaternion.identity);
         ParticleSystem.MainModule ps = deathVFX.GetComponent<ParticleSystem>().main;
 
         ColorChanger colorChanger = GetComponent<ColorChanger>();
 
-        if (colorChanger)
-        {
-            ps.startColor = _colorChanger.CurrentColor;
-        }
-    }
-
-    private void DeathSplatter()
-    {
-        GameObject newSplatter = Instantiate(_deathSplatter, transform.position, Quaternion.identity);
-        SpriteRenderer splatterSpriteRenderer = newSplatter.GetComponent<SpriteRenderer>();
-        Transform parentTransform = _splatterParent.transform;
-        newSplatter.transform.SetParent(parentTransform);
-
-        ColorChanger colorChanger = GetComponent<ColorChanger>();
-
-        if (colorChanger) {
-            splatterSpriteRenderer.color = colorChanger.CurrentColor;
-        }
+        if (colorChanger) { ps.startColor = _colorChanger.CurrentColor; }
     }
 }
