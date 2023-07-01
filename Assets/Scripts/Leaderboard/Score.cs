@@ -10,11 +10,19 @@ public class Score : MonoBehaviour
 
     private TMP_Text _scoreText;
 
+    private void OnEnable() {
+        Health.OnDeath += EnemyKilled;
+    }
+
+    private void OnDisable() {
+        Health.OnDeath -= EnemyKilled;
+    }
+
     private void Awake() {
         _scoreText = GetComponent<TMP_Text>();
     }
 
-    public void EnemyKilled() {
+    public void EnemyKilled(Health sender) {
         CurrentScore++;
         _scoreText.text = CurrentScore.ToString("D3");
     }

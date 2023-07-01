@@ -14,7 +14,6 @@ public class Bullet : MonoBehaviour
     private Vector2 _fireDirection;
     private Vector2 _previousPosition;
     private Vector2 _playerPosOnFire; // getting player pos on fire in case player dies while bullet is in air
-
     private Rigidbody2D _rb;
     private Gun _gun;
 
@@ -55,7 +54,7 @@ public class Bullet : MonoBehaviour
         _rb.velocity = _fireDirection * _moveSpeed;
     }
 
-    // continous rb2d detection doesn't work on static tilemap if tilemap also has rb.  Tilemap needs it for composite collider2d.
+    // continous rb2d detection doesn't work on static tilemap if tilemap also has rb.  Tilemap needs it for composite collider2d for smooth walking for collider movement.
     private void CheckCollision()
     {
         if (!_isInitialized) return;
@@ -68,21 +67,26 @@ public class Bullet : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Instantiate(_hitVFX, hit.point, Quaternion.identity);
-
-            Health health = hit.collider.gameObject.GetComponent<Health>();
-            health?.TakeDamage(_damageAmount);
-
-            if (health && health.CurrentHealth > 0) {
-                Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
-                knockback?.GetKnockedBack(_playerPosOnFire, _knockBackForce);
-            }
-
-            _gun.ReleaseBulletFromPool(this);
-
+            Collide(hit);
             return;
         }
 
         _previousPosition = newPosition;
+    }
+
+    private void Collide(RaycastHit2D hit)
+    {
+        Instantiate(_hitVFX, transform.position, Quaternion.identity);
+
+        Health health = hit.collider.gameObject.GetComponent<Health>();
+
+        if (health && health.CurrentHealth > 0)
+        {
+            Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
+            knockback?.GetKnockedBack(_playerPosOnFire, _knockBackForce);
+            health.TakeDamage(_damageAmount);
+        }
+
+        _gun.ReleaseBulletFromPool(this);
     }
 }

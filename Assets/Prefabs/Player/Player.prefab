@@ -10387,7 +10387,7 @@ GameObject:
   - component: {fileID: 1963876789491989178}
   - component: {fileID: 204040883512947833}
   m_Layer: 7
-  m_Name: Mr. Block
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10445,7 +10445,6 @@ MonoBehaviour:
   _feetTransform: {fileID: 6098175444894000029}
   _groundCheck: {x: 1.12, y: 0.2}
   _coyoteTime: 0.8
-  _jetPackSpriteRenderer: {fileID: 5356436813723310071}
   _visuals: {fileID: 2034445529224776370}
 --- !u!114 &3984436487800704433
 MonoBehaviour:
@@ -10507,9 +10506,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startingHealth: 3
-  _deathVFX: {fileID: 9043520364607239206, guid: a03a587b9fbdfc54d9e9f93ae5e49075, type: 3}
-  _onHitSFX: {fileID: 8300000, guid: be24081d30a35384883bc547431ed946, type: 3}
   _deathSplatter: {fileID: 7427313218258082144, guid: ad84798e471856c40bb1b5deb0bb6feb, type: 3}
+  _deathVFX: {fileID: 9043520364607239206, guid: a03a587b9fbdfc54d9e9f93ae5e49075, type: 3}
 --- !u!70 &2721156719454458728
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

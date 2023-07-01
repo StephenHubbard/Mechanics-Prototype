@@ -72,53 +72,53 @@ public class AudioManager : MonoBehaviour
         SoundToPlay(sound, true);
     }
 
+    private void Health_OnDeath()
+    {
+        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
+        SoundToPlay(sound, true);
+    }
+
     private void Gun_OnShoot()
     {
-        Sound sound = soundSO.GunShoot[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.GunShoot[Random.Range(0, soundSO.GunShoot.Length)];
         SoundToPlay(sound, true);
     }
 
     private void Gun_OnGrenadeShoot()
     {
-        Sound sound = soundSO.GrenadeShoot[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.GrenadeShoot[Random.Range(0, soundSO.GrenadeShoot.Length)];
         SoundToPlay(sound, true);
     }
 
     private void Grenade_OnBeep()
     {
-        Sound sound = soundSO.GrenadeBeep[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.GrenadeBeep[Random.Range(0, soundSO.GrenadeBeep.Length)];
         SoundToPlay(sound);
     }
 
-    private void Grenade_OnExplode()
+    private void Grenade_OnExplode(Grenade sender)
     {
-        Sound sound = soundSO.GrenadeExplosion[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.GrenadeExplosion[Random.Range(0, soundSO.GrenadeExplosion.Length)];
         SoundToPlay(sound);
     }
 
     private void PlayerController_OnPlayerHit()
     {
-        Sound sound = soundSO.PlayerHit[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.PlayerHit[Random.Range(0, soundSO.PlayerHit.Length)];
         SoundToPlay(sound);
     }
 
     private void PlayerController_OnJetpack()
     {
-        Sound sound = soundSO.Jetpack[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.Jetpack[Random.Range(0, soundSO.Jetpack.Length)];
         SoundToPlay(sound);
     }
 
     private void MegaKill() {
-        Sound sound = soundSO.MegaKill[Random.Range(0, soundSO.Splat.Length)];
+        Sound sound = soundSO.MegaKill[Random.Range(0, soundSO.MegaKill.Length)];
         SoundToPlay(sound);
     }
 
-    private void Splatter()
-    {
-        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
-        SoundToPlay(sound, true);
-    }
-        
     #endregion
 
     #region Custom SFX Logic
@@ -137,13 +137,14 @@ public class AudioManager : MonoBehaviour
     {
         yield return null;
 
-        int megaKillInt = 3;
-        if (_deadEnemies.Count >= megaKillInt)
+        int megaKillMinAmount = 3;
+        
+        if (_deadEnemies.Count >= megaKillMinAmount)
         {
             MegaKill();
         }
 
-        Splatter();
+        Health_OnDeath();
         
         _deadEnemies.Clear();
         _enemyDeathCoroutine = null;

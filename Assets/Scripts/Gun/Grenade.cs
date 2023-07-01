@@ -7,7 +7,7 @@ using System;
 public class Grenade : MonoBehaviour
 {
     public static Action OnBeep;
-    public static Action OnExplode;
+    public static Action<Grenade> OnExplode;
 
     [SerializeField] private LayerMask _interactLater;
     [SerializeField] private GameObject _explodeVFX;
@@ -31,6 +31,25 @@ public class Grenade : MonoBehaviour
         StartCoroutine(CountdownExplodeRoutine());
     }
 
+    private void OnEnable() {
+        OnExplode += DamageNearbyColliders;
+        OnExplode += IncreaseScreenShakeByPlayerDistance;
+    }
+
+    private void OnDisable() {
+        OnExplode -= DamageNearbyColliders;
+        OnExplode -= IncreaseScreenShakeByPlayerDistance;
+    }
+
+    private void LaunchGrenade()
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 directionToMouse = (mousePosition - (Vector2)transform.position).normalized;
+        _rb.AddForce(directionToMouse * _launchForce, ForceMode2D.Impulse);
+        float torqueAmount = .2f;
+        _rb.AddTorque(torqueAmount, ForceMode2D.Impulse);
+    }
+
     private IEnumerator CountdownExplodeRoutine() {
         int totalBlinks = 3;
         int currentBlinks = 0;
@@ -46,27 +65,21 @@ public class Grenade : MonoBehaviour
             _grenadeLight.SetActive(false);
         }
 
-        Explode();
-    }
-
-    private void LaunchGrenade() {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 directionToMouse = (mousePosition - (Vector2)transform.position).normalized;
-        _rb.AddForce(directionToMouse * _launchForce, ForceMode2D.Impulse);
-        float torqueAmount = .2f; 
-        _rb.AddTorque(torqueAmount, ForceMode2D.Impulse);
+        OnExplode?.Invoke(this);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if ((_interactLater.value & (1 << other.gameObject.layer)) != 0)
         {
-            Explode();
+            OnExplode?.Invoke(this);
         }
     }
 
-    private void Explode() {
-        OnExplode?.Invoke();
+    private void DamageNearbyColliders(Grenade sender)
+    {
+        if (sender != this) return;
+
         Instantiate(_explodeVFX, transform.position, Quaternion.identity);
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _explodeRadius, _interactLater);
         foreach (var hit in hits)
@@ -74,27 +87,31 @@ public class Grenade : MonoBehaviour
             Health health = hit.GetComponent<Health>();
             health?.TakeDamage(_damageAmount);
 
-            if (health && health.CurrentHealth > 0) {
+            if (health && health.CurrentHealth > 0)
+            {
                 Knockback knockback = hit.GetComponent<Knockback>();
                 knockback?.GetKnockedBack(this.transform.position, _knockBackForce);
             }
         }
 
-        // check if player is dead
-        if (PlayerController.Instance != null) {
+        Destroy(gameObject);
+    }
+
+    private void IncreaseScreenShakeByPlayerDistance(Grenade sender)
+    {
+        if (PlayerController.Instance != null)
+        {
             float distanceToPlayer = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-            
+
             float shakeMin = 0.1f;
             float shakeMax = 1f;
             float shakeIntensity = Mathf.Clamp(1f / distanceToPlayer, shakeMin, shakeMax);
 
-            float xMultiplier = 5f;  
-            float yMultiplier = 3f;  
+            float xMultiplier = 5f;
+            float yMultiplier = 3f;
             Vector2 explosionVelocity = new Vector2(shakeIntensity * xMultiplier, shakeIntensity * yMultiplier);
 
             _impulseSource.GenerateImpulseAt(transform.position, explosionVelocity);
-        } 
-
-        Destroy(gameObject);
+        }
     }
 }

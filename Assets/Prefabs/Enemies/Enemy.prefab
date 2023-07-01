@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 4405051533749482164}
   - component: {fileID: 5613878444295654723}
   m_Layer: 6
-  m_Name: Meanie
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,9 +287,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startingHealth: 3
-  _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
-  _onHitSFX: {fileID: 0}
   _deathSplatter: {fileID: 7427313218258082144, guid: 6208118a161b4ee4699d1a1b9e43bcbb, type: 3}
+  _deathVFX: {fileID: 5393470778657214245, guid: bd8c13d32e6ce5c42a99ea7c1d56adab, type: 3}
 --- !u!114 &-5188165244617546625
 MonoBehaviour:
   m_ObjectHideFlags: 0

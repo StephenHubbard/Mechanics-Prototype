@@ -44,7 +44,7 @@ public class PlayerAnimations : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.layer == _groundLayer.value && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
+        if (((1 << other.gameObject.layer) & _groundLayer.value) != 0 && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
         {
             _landDustVFX.Play();
             ScreenShake();

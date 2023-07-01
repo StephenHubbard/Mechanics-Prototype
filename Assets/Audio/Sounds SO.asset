@@ -16,9 +16,6 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: ea9dd23a2850bae449762c911ab60200, type: 3}
     volume: 0.749
     pitch: 1
-  - clip: {fileID: 8300000, guid: cca501f50b82be844a6272bd8e94a813, type: 3}
-    volume: 0.706
-    pitch: 1
   GrenadeShoot:
   - clip: {fileID: 8300000, guid: adaa3bb0dbfb0fc409ff1e4827e41e54, type: 3}
     volume: 1.37
@@ -37,8 +34,11 @@ MonoBehaviour:
     pitch: 0.98
   Splat:
   - clip: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
-    volume: 0.984
+    volume: 1.362
     pitch: 0.98
+  - clip: {fileID: 8300000, guid: 923a28ee3402ccc468c174d1ba23a879, type: 3}
+    volume: 1.498
+    pitch: 0.79
   Jetpack:
   - clip: {fileID: 8300000, guid: 861fee3b64ad7ed4bb4d1b2534ec4e16, type: 3}
     volume: 0.976

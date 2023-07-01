@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     public Vector2 MoveInput => FrameInput.Move;
-
     public static Action OnPlayerHit;
     public static Action OnJetpack;
 
@@ -19,24 +19,23 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private float _coyoteTime = 0.2f;
-    [SerializeField] private SpriteRenderer _jetPackSpriteRenderer;
     [SerializeField] private GameObject _visuals;
 
-    private FrameInput FrameInput;
     private Quaternion _targetTiltRotation;
     private float _coyoteTimer, _lastDash;
+
+    private FrameInput FrameInput;
     private Rigidbody2D _rb;
     private TrailRenderer _trailRenderer;
     private PlayerInput _playerInput;
     private Knockback _knockBack;
-    private bool _jumping;
     private Fade _fade;
     private Health _health;
     private PlayerAnimations _playerAnimations;
     private Movement _movement;
 
-    protected override void Awake() {
-        base.Awake();
+    public void Awake() {
+        if (Instance == null) { Instance = this; }
 
         _rb = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
@@ -49,16 +48,17 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void Start() {
-        _jumping = false;
         _lastDash = -_dashCD;
     }
 
     private void OnEnable() {
-        _jetPackSpriteRenderer.enabled = true;
+        OnPlayerHit += PlayerHit;
+        OnJetpack += Dash;
     }
 
     private void OnDisable() {
-        _jetPackSpriteRenderer.enabled = false;
+        OnPlayerHit -= PlayerHit;
+        OnJetpack -= Dash;
     }
 
     private void Update()
@@ -75,13 +75,10 @@ public class PlayerController : Singleton<PlayerController>
     {
         Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
-        if (!enemy) { return; }
-
-        OnPlayerHit?.Invoke();
-        int enemyDamageAmount = 1;
-        _health.TakeDamage(enemyDamageAmount);
-        _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
-        _playerAnimations.ScreenShake();
+        if (enemy && _movement.CanMove) { 
+            OnPlayerHit?.Invoke();
+            _knockBack.GetKnockedBack(enemy.transform.position, enemy.KnockbackThrust);
+        }
     }
 
     public bool IsFacingRight()
@@ -92,6 +89,12 @@ public class PlayerController : Singleton<PlayerController>
     public void PlayerDeath() {
         _fade.FadeIn();
         Destroy(gameObject);
+    }
+
+    private void PlayerHit() {
+        int enemyDamageAmount = 1;
+        _health.TakeDamage(enemyDamageAmount);
+        _playerAnimations.ScreenShake();
     }
 
     private void GatherInput()
@@ -120,11 +123,10 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Jump()
     {
-        if (FrameInput.Jump && !_jumping && _coyoteTimer > 0 && CheckGrounded())
+        if (FrameInput.Jump && _coyoteTimer > 0 && CheckGrounded())
         {
             _rb.velocity = Vector2.up * _jumpStrength;
             _coyoteTimer = 0;
-            _jumping = true;
             StartCoroutine(JumpCDRoutine());
         }
     }
@@ -140,7 +142,6 @@ public class PlayerController : Singleton<PlayerController>
     {
         float jumpRefreshTime = .2f;
         yield return new WaitForSeconds(jumpRefreshTime);
-        _jumping = false;
     }
 
     private void Jetpack()
@@ -148,12 +149,15 @@ public class PlayerController : Singleton<PlayerController>
         if (FrameInput.Dash && Time.time >= _lastDash + _dashCD)
         {
             OnJetpack?.Invoke();
-            _trailRenderer.enabled = true;
-            Vector2 direction = _rb.velocity.normalized;
-            _rb.velocity = direction * _dashSpeed;
-            _lastDash = Time.time;
-            StartCoroutine(JetpackRoutine());
         }
+    }
+
+    private void Dash() {
+        _trailRenderer.enabled = true;
+        Vector2 direction = _rb.velocity.normalized;
+        _rb.velocity = direction * _dashSpeed;
+        _lastDash = Time.time;
+        StartCoroutine(JetpackRoutine());
     }
 
     private IEnumerator JetpackRoutine()

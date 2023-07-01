@@ -14,10 +14,8 @@ public class Leaderboard : MonoBehaviour
     [SerializeField] private GameObject _loadingText;
     [SerializeField] private Score _score;
 
+    // for lootlocker api
     const string LEADERBOARD_ID = "mechanicsPrototype";
-
-    // private enum GameState { MenuIdle, LoggingIn, Error, LoggedIn, Play };
-    // private GameState gameState = GameState.MenuIdle;
 
     private void Start()
     {
@@ -39,11 +37,9 @@ public class Leaderboard : MonoBehaviour
             if (response.success)
             {
                 gotResponse = true;
-                // gameState = GameState.LoggedIn;
             }
             else
             {
-                // gameState = GameState.Error;
                 gotResponse = true;
             }
         });

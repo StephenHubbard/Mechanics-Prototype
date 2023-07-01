@@ -180,6 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2730755534599638069, guid: a099caf06a6e56041983d3c555f5d1be, type: 3}
   _spawnTimer: 3
+  _randomizeSpawnTimerModifer: 1
 --- !u!114 &785067680621265755
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Pipe : MonoBehaviour
 {
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private float _spawnTimer = 3f;
+    [SerializeField] private float _randomizeSpawnTimerModifer = 1f;
 
     private ObjectPool<Enemy> _enemyPool;
     private ColorChanger _colorChanger;
@@ -55,11 +56,12 @@ public class Pipe : MonoBehaviour
             ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
             newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
 
-            float randomTimeModifier = Random.Range(-1f, 1);
+            float randomTimeModifier = Random.Range(-_randomizeSpawnTimerModifer, _randomizeSpawnTimerModifer);
             float spawnWaitTime = _spawnTimer + randomTimeModifier;
+            float minSpawnWaitTime = 0.1f;
             if (spawnWaitTime <= 0)
             {
-                spawnWaitTime = 0.1f;
+                spawnWaitTime = minSpawnWaitTime;
             }
            
             yield return new WaitForSeconds(spawnWaitTime);

@@ -15,6 +15,7 @@ public class Knockback : MonoBehaviour
     private Rigidbody2D _rb;
     private ColorChanger _colorChanger;
     private Flash _flash;
+    
 
     private void Awake()
     {
