@@ -11,6 +11,7 @@ public class Grenade : MonoBehaviour
 
     [SerializeField] private LayerMask _interactLater;
     [SerializeField] private GameObject _explodeVFX;
+    [SerializeField] private GameObject _grenadeFlash;
     [SerializeField] private float _explodeRadius = 3.5f;
     [SerializeField] private float _launchForce = 15f;
     [SerializeField] private float _explodeTime = 3f;
@@ -34,11 +35,13 @@ public class Grenade : MonoBehaviour
     private void OnEnable() {
         OnExplode += DamageNearbyColliders;
         OnExplode += IncreaseScreenShakeByPlayerDistance;
+        OnExplode += GrenadeFlash;
     }
 
     private void OnDisable() {
         OnExplode -= DamageNearbyColliders;
         OnExplode -= IncreaseScreenShakeByPlayerDistance;
+        OnExplode -= GrenadeFlash;
     }
 
     private void LaunchGrenade()
@@ -113,5 +116,11 @@ public class Grenade : MonoBehaviour
 
             _impulseSource.GenerateImpulseAt(transform.position, explosionVelocity);
         }
+    }
+
+    private void GrenadeFlash(Grenade sender) {
+        if (sender != this) return;
+
+        GameObject grenadeFlash = Instantiate(_grenadeFlash, transform.position, Quaternion.identity);
     }
 }

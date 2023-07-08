@@ -13,4 +13,6 @@ public class SoundsSO : ScriptableObject
     public Sound[] Splat;
     public Sound[] Jetpack;
     public Sound[] MegaKill;
+    public Sound[] Discoball;
+    public Sound[] Jump;
 }

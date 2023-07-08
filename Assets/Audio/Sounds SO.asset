@@ -47,3 +47,11 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 7b376744f024d6a4cb399960b9369f89, type: 3}
     volume: 0.992
     pitch: 1
+  Discoball:
+  - clip: {fileID: 8300000, guid: b3d3772c565be1f4483865eac0af4242, type: 3}
+    volume: 0.97
+    pitch: 1
+  Jump:
+  - clip: {fileID: 8300000, guid: a8f38d631d578cd4b9b6f880e1c2fbe0, type: 3}
+    volume: 0.834
+    pitch: 0.99

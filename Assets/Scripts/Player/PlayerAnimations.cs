@@ -14,7 +14,7 @@ public class PlayerAnimations : MonoBehaviour
     [SerializeField] private float _tiltAngle = 10f;    
     [SerializeField] private float _tiltSpeed = 5f;
     [SerializeField] private float _yLandImpactDustEffect = -12f;
-    [SerializeField] private ParticleSystem _landDustVFX;
+    [SerializeField] private ParticleSystem _dustVFX;
     [SerializeField] private ParticleSystem _moveDustVFX;
 
     private Vector2 _moveDir;
@@ -46,9 +46,13 @@ public class PlayerAnimations : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & _groundLayer.value) != 0 && _velocityBeforePhysicsUpdate.y <= _yLandImpactDustEffect)
         {
-            _landDustVFX.Play();
+            PlayDustVFX();
             ScreenShake();
         }
+    }
+
+    public void PlayDustVFX() {
+        _dustVFX.Play();
     }
 
     public void ScreenShake() {

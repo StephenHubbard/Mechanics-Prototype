@@ -22,6 +22,8 @@ public class AudioManager : MonoBehaviour
         Grenade.OnExplode += Grenade_OnExplode;
         PlayerController.OnPlayerHit += PlayerController_OnPlayerHit;
         PlayerController.OnJetpack += PlayerController_OnJetpack;
+        DiscoballManager.OnDiscoballHit += Discoball_OnDiscoBallHit;
+        PlayerController.OnJump += PlayerController_OnJump;
     }
 
     private void OnDisable() {
@@ -32,6 +34,8 @@ public class AudioManager : MonoBehaviour
         Grenade.OnExplode -= Grenade_OnExplode;
         PlayerController.OnPlayerHit -= PlayerController_OnPlayerHit;
         PlayerController.OnJetpack -= PlayerController_OnJetpack;
+        DiscoballManager.OnDiscoballHit -= Discoball_OnDiscoBallHit;
+        PlayerController.OnJump -= PlayerController_OnJump;
     }
 
     #region Sound Methods
@@ -117,6 +121,18 @@ public class AudioManager : MonoBehaviour
     private void MegaKill() {
         Sound sound = soundSO.MegaKill[Random.Range(0, soundSO.MegaKill.Length)];
         SoundToPlay(sound);
+    }
+
+    private void Discoball_OnDiscoBallHit()
+    {
+        Sound sound = soundSO.Discoball[Random.Range(0, soundSO.MegaKill.Length)];
+        SoundToPlay(sound);
+    }
+
+    private void PlayerController_OnJump()
+    {
+        Sound sound = soundSO.Jump[Random.Range(0, soundSO.MegaKill.Length)];
+        SoundToPlay(sound, true);
     }
 
     #endregion

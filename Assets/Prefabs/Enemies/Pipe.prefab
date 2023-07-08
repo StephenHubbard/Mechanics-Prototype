@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 947131934952006615}
   - component: {fileID: 1000379880703932675}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4791099108878134356}
   - component: {fileID: 785067680621265755}
   - component: {fileID: 1701055436726040009}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ Transform:
   - {fileID: 947131934952006615}
   - {fileID: 554638714716099249}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &8478564978530914668
 BoxCollider2D:
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ee6b8ef069edb40ad8da925828717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setColorOnStart: 0
+  _setColorOnStart: 1
   _pinkColor: {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
   _greenColor: {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
   _blueColor: {r: 0.6392157, g: 0.8352941, b: 1, a: 1}
@@ -220,7 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 554638714716099249}
   - component: {fileID: 986978932970468832}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}

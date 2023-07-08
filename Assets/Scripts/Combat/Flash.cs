@@ -5,6 +5,7 @@ using UnityEngine;
 public class Flash : MonoBehaviour
 {
     [SerializeField] private Material _whiteFlashMat;
+    [SerializeField] private float _flashTime = 0.1f;
 
     private Material _defaultMat;
     private SpriteRenderer[] _spriteRenderers;
@@ -25,7 +26,7 @@ public class Flash : MonoBehaviour
         }
     }
 
-    public IEnumerator FlashRoutine(float knockBackTime)
+    public IEnumerator FlashRoutine()
     {
         foreach (SpriteRenderer sr in _spriteRenderers)
         {
@@ -33,8 +34,7 @@ public class Flash : MonoBehaviour
             if (_colorChanger) { _colorChanger.SetFillColorWhite(); }
         }
 
-        float flashTime = knockBackTime / 2f;
-        yield return new WaitForSeconds(flashTime);
+        yield return new WaitForSeconds(_flashTime);
 
         foreach (SpriteRenderer sr in _spriteRenderers)
         {

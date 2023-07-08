@@ -167,6 +167,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   _explodeVFX: {fileID: 2408165140139399364, guid: a914a045b3dc82f41baab3757d49b6ba, type: 3}
+  _grenadeFlash: {fileID: 8293302263425336509, guid: a77810495328d73409d63df061fdf8d6, type: 3}
   _explodeRadius: 3.5
   _launchForce: 15
   _explodeTime: 3

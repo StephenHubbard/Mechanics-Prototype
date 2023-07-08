@@ -78,14 +78,8 @@ public class Bullet : MonoBehaviour
     {
         Instantiate(_hitVFX, transform.position, Quaternion.identity);
 
-        Health health = hit.collider.gameObject.GetComponent<Health>();
-
-        if (health && health.CurrentHealth > 0)
-        {
-            Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
-            knockback?.GetKnockedBack(_playerPosOnFire, _knockBackForce);
-            health.TakeDamage(_damageAmount);
-        }
+        IHitable iHitable = hit.collider.gameObject.GetComponent<IHitable>();
+        iHitable?.TakeHit(hit, _playerPosOnFire, _knockBackForce, _damageAmount);
 
         _gun.ReleaseBulletFromPool(this);
     }

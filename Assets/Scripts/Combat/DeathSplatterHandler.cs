@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class DeathHandler : MonoBehaviour
+public class DeathSplatterHandler : MonoBehaviour
 {
     private void OnEnable()
     {

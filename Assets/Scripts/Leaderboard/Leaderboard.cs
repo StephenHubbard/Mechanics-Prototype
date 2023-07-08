@@ -4,6 +4,7 @@ using UnityEngine;
 using LootLocker.Requests;
 using TMPro;
 
+// Not gonna use this class atm
 public class Leaderboard : MonoBehaviour
 {
     [SerializeField] private bool _activateLeaderBoard = false;

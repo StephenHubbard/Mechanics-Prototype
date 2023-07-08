@@ -21,14 +21,14 @@ public class Health : MonoBehaviour
     private Enemy _enemy;
     private ColorChanger _colorChanger;
     private Score _score;
-    private DeathHandler _splatterParent;
+    private DeathSplatterHandler _splatterParent;
 
     private void Awake() {
         _knockBack = GetComponent<Knockback>();
         _enemy = GetComponent<Enemy>();
         _colorChanger = GetComponent<ColorChanger>();
         _score = FindObjectOfType<Score>();
-        _splatterParent = FindObjectOfType<DeathHandler>();
+        _splatterParent = FindObjectOfType<DeathSplatterHandler>();
     }
 
     private void Start() {

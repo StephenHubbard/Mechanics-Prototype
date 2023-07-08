@@ -375,7 +375,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_SortAtRoot: 0
 --- !u!114 &4405051533749482164
 MonoBehaviour:
@@ -407,3 +407,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _whiteFlashMat: {fileID: 2100000, guid: 9cab85c9cc19bf8419422c1dcfe73879, type: 2}
+  _flashTime: 0.1

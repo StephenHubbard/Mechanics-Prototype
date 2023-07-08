@@ -29,7 +29,7 @@ public class Knockback : MonoBehaviour
         Vector2 difference = ((Vector2)transform.position - damageSource).normalized * knockBackThrust * _rb.mass;
         _rb.AddForce(difference, ForceMode2D.Impulse);
         StartCoroutine(KnockRoutine());
-        StartCoroutine(_flash.FlashRoutine(_knockBackTime));
+        StartCoroutine(_flash.FlashRoutine());
 
         OnKnockBackStart?.Invoke();
     }

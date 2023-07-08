@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour
     public Vector2 MoveInput => FrameInput.Move;
     public static Action OnPlayerHit;
     public static Action OnJetpack;
+    public static Action OnJump;
 
     [SerializeField] private float _dashSpeed;
     [SerializeField] private float _dashTime = .7f;
     [SerializeField] private float _dashCD = 2f;
+    [SerializeField] private float _lastJumpBuffer = .3f;
     [SerializeField] private float _jumpStrength;
     [SerializeField] private float _extraGravity = 50f;
     [SerializeField] private LayerMask _groundLayer;
@@ -22,7 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _visuals;
 
     private Quaternion _targetTiltRotation;
-    private float _coyoteTimer, _lastDash;
+    private float _coyoteTimer, _lastDash, _lastJumpPressed;
+    private bool _doubleJumpAvailable, _coyoteJump;
 
     private FrameInput FrameInput;
     private Rigidbody2D _rb;
@@ -48,17 +51,20 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Start() {
+        _lastJumpPressed = -_lastJumpBuffer;
         _lastDash = -_dashCD;
     }
 
     private void OnEnable() {
         OnPlayerHit += PlayerHit;
         OnJetpack += Dash;
+        OnJump += ApplyJumpForce;
     }
 
     private void OnDisable() {
         OnPlayerHit -= PlayerHit;
         OnJetpack -= Dash;
+        OnJump -= ApplyJumpForce;
     }
 
     private void Update()
@@ -66,7 +72,7 @@ public class PlayerController : MonoBehaviour
         GatherInput();
         HandleSpriteFlip();
         CoyoteTimer();
-        Jump();
+        HandleJump();
         ExtraGravity();
         Jetpack();
     }
@@ -103,14 +109,8 @@ public class PlayerController : MonoBehaviour
         _movement.SetCurrentDirection(FrameInput.Move.x);
     }
 
-    private void CoyoteTimer()
-    {
-        _coyoteTimer = CheckGrounded() ? _coyoteTime : _coyoteTimer - Time.deltaTime;
-    }
-
     public Collider2D CheckGrounded() {
         Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0, _groundLayer);
-
         return isGrounded;
     }
 
@@ -121,28 +121,59 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube(_feetTransform.position, _groundCheck);
     }
 
-    private void Jump()
+    private void HandleJump()
     {
-        if (FrameInput.Jump && _coyoteTimer > 0 && CheckGrounded())
+        if (!FrameInput.Jump) return;
+
+        if (CheckGrounded())
         {
-            _rb.velocity = Vector2.up * _jumpStrength;
-            _coyoteTimer = 0;
-            StartCoroutine(JumpCDRoutine());
+            Jump();
+        }
+        else if (_coyoteTimer > 0)
+        {
+            Jump();
+        }
+        else if (_doubleJumpAvailable)
+        {
+            _doubleJumpAvailable = false;
+            Jump();
         }
     }
 
-    private void ExtraGravity() {
+    private void Jump()
+    {
+        OnJump?.Invoke();
+    }
+
+    private void ApplyJumpForce() {
+        _rb.velocity = Vector2.zero;
+        _rb.velocity = Vector2.up * _jumpStrength;
+        _lastJumpPressed = Time.time;
+        _coyoteTimer = 0;
+        _playerAnimations.PlayDustVFX();
+    }
+
+    private void CoyoteTimer()
+    {
+        if (CheckGrounded())
+        {
+            _doubleJumpAvailable = true;
+            _coyoteTimer = _coyoteTime;
+        }
+        else
+        {
+            _coyoteTimer -= Time.deltaTime;
+        }
+    }
+
+    private void ExtraGravity()
+    {
         if (!CheckGrounded())
         {
             _rb.AddForce(new Vector2(0, -_extraGravity * Time.deltaTime));
         }
     }
 
-    private IEnumerator JumpCDRoutine()
-    {
-        float jumpRefreshTime = .2f;
-        yield return new WaitForSeconds(jumpRefreshTime);
-    }
 
     private void Jetpack()
     {
