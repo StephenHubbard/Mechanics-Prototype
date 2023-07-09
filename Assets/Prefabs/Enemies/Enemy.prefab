@@ -314,6 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ff3f121c8ff504ba3f8aac88c4802d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damageAmount: 1
   _changeDirectionTime: 4
   _knockBackThrust: 25
   _jumpForce: 15
@@ -390,9 +391,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setColorOnStart: 0
-  _pinkColor: {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
-  _greenColor: {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
-  _blueColor: {r: 0.6392157, g: 0.8352941, b: 1, a: 1}
+  _colors:
+  - {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
+  - {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
+  - {r: 0.6392157, g: 0.8352941, b: 1, a: 1}
   _fillSpriteRenderer: {fileID: 2322999612773204759}
 --- !u!114 &5613878444295654723
 MonoBehaviour:

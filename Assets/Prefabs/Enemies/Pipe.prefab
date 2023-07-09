@@ -194,9 +194,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setColorOnStart: 1
-  _pinkColor: {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
-  _greenColor: {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
-  _blueColor: {r: 0.6392157, g: 0.8352941, b: 1, a: 1}
+  _colors:
+  - {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
+  - {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
+  - {r: 0.6392157, g: 0.8352941, b: 1, a: 1}
   _fillSpriteRenderer: {fileID: 1000379880703932675}
 --- !u!210 &1701055436726040009
 SortingGroup:

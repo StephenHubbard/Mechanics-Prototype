@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using System;
 
-public class Discoball : MonoBehaviour, IHitable
+public class Discoball : MonoBehaviour, IBulletCollideable
 {
     private DiscoballManager _discoballManager;
 

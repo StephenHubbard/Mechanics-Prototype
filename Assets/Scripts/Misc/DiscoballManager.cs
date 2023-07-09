@@ -12,10 +12,13 @@ public class DiscoballManager : MonoBehaviour
     [SerializeField] private float _discoPartyTime = 3f;
     [SerializeField] private float _discoGlobalLight = 0.1f;
     [SerializeField] private Light2D _globalLight;
+    [SerializeField] private Volume _globalVolume;
+    [SerializeField] private VolumeProfile _volumeProfileLight;
+    [SerializeField] private VolumeProfile _volumeProfileDark;
 
     private float _defaultGlobalLightIntensity;
     private Coroutine _discoCoroutine;
-    private SpotlightCustom[] _allSpotlights;
+    private ColorSpotlight[] _allSpotlights;
 
     private void Awake()
     {
@@ -24,7 +27,7 @@ public class DiscoballManager : MonoBehaviour
 
     private void Start()
     {
-        _allSpotlights = FindObjectsOfType<SpotlightCustom>();
+        _allSpotlights = FindObjectsOfType<ColorSpotlight>();
     }
 
     private void OnEnable() {
@@ -43,11 +46,12 @@ public class DiscoballManager : MonoBehaviour
     }
 
     private void DimTheLights() {
+        _globalVolume.profile = _volumeProfileDark;
         _globalLight.intensity = _discoGlobalLight;
 
-        foreach (SpotlightCustom spotLight in _allSpotlights)
+        foreach (ColorSpotlight spotLight in _allSpotlights)
         {
-            spotLight.SpotLightDiscoParty(_discoPartyTime);
+            StartCoroutine(spotLight.SpotLightDiscoParty(_discoPartyTime));
         }
 
         _discoCoroutine = StartCoroutine(GlobalLightResetRoutine());
@@ -56,6 +60,7 @@ public class DiscoballManager : MonoBehaviour
     private IEnumerator GlobalLightResetRoutine()
     {
         yield return new WaitForSeconds(_discoPartyTime);
+        _globalVolume.profile = _volumeProfileLight;
         _globalLight.intensity = _defaultGlobalLightIntensity;
         _discoCoroutine = null;
     }

@@ -7,9 +7,7 @@ public class ColorChanger : MonoBehaviour
     public Color CurrentColor { get; private set; }
 
     [SerializeField] private bool _setColorOnStart = false;
-    [SerializeField] private Color _pinkColor;
-    [SerializeField] private Color _greenColor;
-    [SerializeField] private Color _blueColor;
+    [SerializeField] private Color[] _colors;
     [SerializeField] private SpriteRenderer _fillSpriteRenderer;
 
     private SpriteRenderer[] _spriteRenderers;
@@ -39,27 +37,8 @@ public class ColorChanger : MonoBehaviour
     }
 
     public void SetRandomColor() {
-        int randomNum = Random.Range(0, 3);
-
-        switch (randomNum)
-        {
-            case 0:
-                CurrentColor = _pinkColor;
-                break;
-
-            case 1:
-                CurrentColor = _greenColor;
-                break;
-
-            case 2:
-                CurrentColor = _blueColor;
-                break;
-            
-            default:
-                Debug.Log("Color does not exist");
-                break;
-        }
-
+        int randomNum = Random.Range(0, _colors.Length);
+        CurrentColor = _colors[randomNum];
         _fillSpriteRenderer.color = CurrentColor;
     }
 }

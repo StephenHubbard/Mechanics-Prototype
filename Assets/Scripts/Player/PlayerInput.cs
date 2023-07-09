@@ -6,26 +6,26 @@ using UnityEngine.InputSystem;
 public class PlayerInput : MonoBehaviour
 {
     public FrameInput FrameInput { get; private set; }
-    private PlayerInputActions _actions;
+    private PlayerInputActions _inputActions;
     private InputAction _move, _attack, _jump, _jetpack, _grenade;
 
     private void Awake() {
-        _actions = new PlayerInputActions();
+        _inputActions = new PlayerInputActions();
 
-        _move = _actions.Player.Move;
-        _attack = _actions.Player.Attack;
-        _jump = _actions.Player.Jump;
-        _jetpack = _actions.Player.Jetpack;
-        _grenade = _actions.Player.Grenade;
+        _move = _inputActions.Player.Move;
+        _attack = _inputActions.Player.Attack;
+        _jump = _inputActions.Player.Jump;
+        _jetpack = _inputActions.Player.Jetpack;
+        _grenade = _inputActions.Player.Grenade;
     }
 
     private void Update() {
         FrameInput = GatherInput();
     }
 
-    private void OnEnable() => _actions.Enable();
+    private void OnEnable() => _inputActions.Enable();
 
-    private void OnDisable() => _actions.Disable();
+    private void OnDisable() => _inputActions.Disable();
 
     private FrameInput GatherInput()
     {

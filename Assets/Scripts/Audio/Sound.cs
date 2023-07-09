@@ -6,10 +6,10 @@ using UnityEngine.Audio;
 [System.Serializable]
 public class Sound
 {
-    public AudioClip clip;
-
-    [Range(0f, 2f)]
-    public float volume = 1f;
-    [Range(.1f, 3f)]
-    public float pitch = 1f;
+    public AudioClip Clip;
+    public enum AudioTypes { SFX, Music };
+    public AudioTypes AudioType;
+    public bool Loop = false;
+    [Range(0f, 2f)] public float Volume = 1f;
+    [Range(.1f, 3f)] public float Pitch = 1f;
 }

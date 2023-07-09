@@ -9,6 +9,8 @@ public class Pipe : MonoBehaviour
     [SerializeField] private float _spawnTimer = 3f;
     [SerializeField] private float _randomizeSpawnTimerModifer = 1f;
 
+    float _minSpawnWaitTime = 0.1f;
+
     private ObjectPool<Enemy> _enemyPool;
     private ColorChanger _colorChanger;
 
@@ -21,8 +23,8 @@ public class Pipe : MonoBehaviour
         StartCoroutine(SpawnRoutine());
     }
 
-    public void ReleaseEnemyFromPool(Enemy enemyMovement) {
-        _enemyPool.Release(enemyMovement);
+    public void ReleaseEnemyFromPool(Enemy enemy) {
+        _enemyPool.Release(enemy);
     }
 
     private void CreateEnemyPool()
@@ -43,30 +45,16 @@ public class Pipe : MonoBehaviour
     }
 
     private IEnumerator SpawnRoutine() {
-        Enemy newEnemy;
-
         while (true)
         {
-            newEnemy = _enemyPool.Get();
-            newEnemy.transform.position = this.transform.position;
-
-            Health enemyHealth = newEnemy.GetComponent<Health>();
-            enemyHealth.EnemyInit(this);
-
-            ColorChanger newEnemyColorChanger = newEnemy.GetComponent<ColorChanger>();
-            newEnemyColorChanger.SetColor(_colorChanger.CurrentColor);
+            Enemy enemy = _enemyPool.Get();
+            enemy.EnemyInit(this, _colorChanger.CurrentColor);
 
             float randomTimeModifier = Random.Range(-_randomizeSpawnTimerModifer, _randomizeSpawnTimerModifer);
-            float spawnWaitTime = _spawnTimer + randomTimeModifier;
-            float minSpawnWaitTime = 0.1f;
-            if (spawnWaitTime <= 0)
-            {
-                spawnWaitTime = minSpawnWaitTime;
-            }
-           
+            float spawnWaitTime = Mathf.Max(_spawnTimer + randomTimeModifier, _minSpawnWaitTime);
+
             yield return new WaitForSeconds(spawnWaitTime);
             _colorChanger.SetRandomColor();
         }
-
     }
 }

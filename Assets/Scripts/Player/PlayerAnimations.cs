@@ -5,12 +5,9 @@ using Cinemachine;
 
 public class PlayerAnimations : MonoBehaviour
 {
-    private FrameInput FrameInput;
-
-    public Vector2 MoveInput => FrameInput.Move;
-
     [SerializeField] private LayerMask _groundLayer;
-    [SerializeField] private SpriteRenderer _playerSpriteRenderer;
+    [SerializeField] private Transform _playerCharacterTransform;
+    [SerializeField] private Transform _playerHatTransform;
     [SerializeField] private float _tiltAngle = 10f;    
     [SerializeField] private float _tiltSpeed = 5f;
     [SerializeField] private float _yLandImpactDustEffect = -12f;
@@ -21,25 +18,32 @@ public class PlayerAnimations : MonoBehaviour
     private Vector3 _velocityBeforePhysicsUpdate;
 
     private PlayerInput _playerInput;
-    private Rigidbody2D _rb;
+    private Rigidbody2D _rigidBody;
     private PlayerController _playerController;
     private CinemachineImpulseSource _impulseSource;
 
     public void Awake() {
         _playerInput = GetComponent<PlayerInput>();
-        _rb = GetComponent<Rigidbody2D>();
+        _rigidBody = GetComponent<Rigidbody2D>();
         _playerController = GetComponent<PlayerController>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
+    private void OnEnable() {
+        PlayerController.OnJump += PlayDustVFX;
+    }
+
+    private void OnDisable() {
+        PlayerController.OnJump -= PlayDustVFX;
+    }
+
     private void Update() {
-        GatherInput();
         ApplyTilt();
         DetectMoveEffect();
     }
 
     private void FixedUpdate() {
-        _velocityBeforePhysicsUpdate = _rb.velocity;
+        _velocityBeforePhysicsUpdate = _rigidBody.velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -83,20 +87,31 @@ public class PlayerAnimations : MonoBehaviour
         }
     }
 
-    private void GatherInput()
-    {
-        FrameInput = _playerInput.FrameInput;
-        _moveDir.x = FrameInput.Move.x;
-    }
-
     private void ApplyTilt()
     {
-        float targetAngle = MoveInput.x < 0 ? _tiltAngle : MoveInput.x > 0 ? -_tiltAngle : 0f;
-        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
-        Quaternion currentRotation = _playerSpriteRenderer.transform.rotation;
+        float targetAngle;
 
-        targetRotation.eulerAngles = new Vector3(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, targetRotation.eulerAngles.z);
+        if (_playerController.MoveInput.x < 0)
+        {
+            targetAngle = _tiltAngle;
+        }
+        else if (_playerController.MoveInput.x > 0)
+        {
+            targetAngle = -_tiltAngle;
+        }
+        else
+        {
+            targetAngle = 0f;
+        }
+        
+        Quaternion currentRotationChar = _playerCharacterTransform.rotation;
+        Quaternion targetRotationChar = Quaternion.Euler(currentRotationChar.eulerAngles.x, currentRotationChar.eulerAngles.y, targetAngle);
+        _playerCharacterTransform.rotation = Quaternion.Lerp(currentRotationChar, targetRotationChar, _tiltSpeed * Time.deltaTime);
 
-        _playerSpriteRenderer.transform.rotation = Quaternion.Lerp(_playerSpriteRenderer.transform.rotation, targetRotation, _tiltSpeed * Time.deltaTime);
+        // would make a nice challenge to mimic above
+        float tiltHatModifier = 4f;
+        Quaternion currentRotationHat = _playerHatTransform.rotation;
+        Quaternion targetRotationHat = Quaternion.Euler(currentRotationHat.eulerAngles.x, currentRotationHat.eulerAngles.y, -targetAngle);
+        _playerHatTransform.rotation = Quaternion.Lerp(currentRotationHat, targetRotationHat, _tiltSpeed * tiltHatModifier * Time.deltaTime);
     }
 }

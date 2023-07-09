@@ -7,38 +7,34 @@ public class Knockback : MonoBehaviour
 {
     public float KnockBackTime => _knockBackTime;
 
-    public event Action OnKnockBackStart;
-    public event Action OnKnockBackEnd;
-
     [SerializeField] private float _knockBackTime = .2f;
 
-    private Rigidbody2D _rb;
+    private Rigidbody2D _rigidBody;
     private ColorChanger _colorChanger;
     private Flash _flash;
-    
+    private Movement _movement;
 
     private void Awake()
     {
         _flash = GetComponent<Flash>();
         _colorChanger = GetComponent<ColorChanger>();
-        _rb = GetComponent<Rigidbody2D>();
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _movement = GetComponent<Movement>();
     }
 
-    public void GetKnockedBack(Vector2 damageSource, float knockBackThrust)
+    public void GetKnockedBack(Vector3 hitDirection, float knockbackThrust)
     {
-        Vector2 difference = ((Vector2)transform.position - damageSource).normalized * knockBackThrust * _rb.mass;
-        _rb.AddForce(difference, ForceMode2D.Impulse);
+        Vector3 difference = (transform.position - hitDirection).normalized * knockbackThrust * _rigidBody.mass;
+        _rigidBody.AddForce(difference, ForceMode2D.Impulse);
         StartCoroutine(KnockRoutine());
         StartCoroutine(_flash.FlashRoutine());
-
-        OnKnockBackStart?.Invoke();
+        _movement.KnockBackStart();
     }
 
     private IEnumerator KnockRoutine()
     {
         yield return new WaitForSeconds(_knockBackTime);
-        _rb.velocity = Vector2.zero;
-
-        OnKnockBackEnd?.Invoke();
+        _rigidBody.velocity = Vector2.zero;
+        _movement.KnockBackEnd();
     }
 }

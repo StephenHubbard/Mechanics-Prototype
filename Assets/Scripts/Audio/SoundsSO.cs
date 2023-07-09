@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu()]
 public class SoundsSO : ScriptableObject 
 {
+    public Sound[] Discoball_Music;
+    public Sound[] Fight_Music;
+
     public Sound[] GunShoot;
     public Sound[] GrenadeShoot;
     public Sound[] GrenadeBeep;
@@ -13,6 +16,5 @@ public class SoundsSO : ScriptableObject
     public Sound[] Splat;
     public Sound[] Jetpack;
     public Sound[] MegaKill;
-    public Sound[] Discoball;
     public Sound[] Jump;
 }

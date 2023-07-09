@@ -20,25 +20,25 @@ public class Flash : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach (SpriteRenderer sr in _spriteRenderers)
+        foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
         {
-            sr.material = _defaultMat;
+            spriteRenderer.material = _defaultMat;
         }
     }
 
     public IEnumerator FlashRoutine()
     {
-        foreach (SpriteRenderer sr in _spriteRenderers)
+        foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
         {
-            sr.material = _whiteFlashMat;
+            spriteRenderer.material = _whiteFlashMat;
             if (_colorChanger) { _colorChanger.SetFillColorWhite(); }
         }
 
         yield return new WaitForSeconds(_flashTime);
 
-        foreach (SpriteRenderer sr in _spriteRenderers)
+        foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
         {
-            sr.material = _defaultMat;
+            spriteRenderer.material = _defaultMat;
             if (_colorChanger) { _colorChanger.SetFillColorDefault(); }
         }
     }

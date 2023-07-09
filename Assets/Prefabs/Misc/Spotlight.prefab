@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3400336642433714351}
   - component: {fileID: 4402520067053807158}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1459056825573565306}
   - component: {fileID: 7612001753663260026}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7968454677476154050}
   - component: {fileID: 1857585390519272723}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2881158514406839382}
   - component: {fileID: 481652619652979283}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7705306497219592615}
   - component: {fileID: 3658341007607319164}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,8 +375,9 @@ MonoBehaviour:
   _light: {fileID: 7612001753663260026}
   _lightColors:
   - {r: 1, g: 0.3443396, b: 0.3443396, a: 1}
-  - {r: 0, g: 1, b: 0.40223455, a: 1}
-  - {r: 0.1462264, g: 0.61046606, b: 1, a: 1}
-  _rotSpeed: 20
-  _discoPartyRotSpeed: 7
-  _maxRot: 45
+  - {r: 0, g: 1, b: 0.5723033, a: 1}
+  - {r: 0.14509803, g: 0.43561277, b: 1, a: 1}
+  - {r: 1, g: 0.14509803, b: 0.85232264, a: 1}
+  _rotationSpeed: 25
+  _discoPartyRotationSpeed: 150
+  _maxRotation: 45

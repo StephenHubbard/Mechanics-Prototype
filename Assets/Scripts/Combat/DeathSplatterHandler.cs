@@ -25,7 +25,8 @@ public class DeathSplatterHandler : MonoBehaviour
         newSplatter.transform.SetParent(this.transform);
         SpriteRenderer splatterSpriteRenderer = newSplatter.GetComponent<SpriteRenderer>();
         ColorChanger colorChanger = sender.GetComponent<ColorChanger>();
-        if (colorChanger != null) { splatterSpriteRenderer.color = colorChanger.CurrentColor; }
+
+        if (colorChanger) { splatterSpriteRenderer.color = colorChanger.CurrentColor; }
     }
 
     public void DeathVFX(Health sender)
@@ -35,6 +36,7 @@ public class DeathSplatterHandler : MonoBehaviour
         GameObject newDeathVFX = Instantiate(deathVFX, deathPosition, Quaternion.identity);
         ParticleSystem.MainModule ps = newDeathVFX.GetComponent<ParticleSystem>().main;
         ColorChanger colorChanger = sender.GetComponent<ColorChanger>();
+        
         if (colorChanger) { ps.startColor = colorChanger.CurrentColor; }
     }
 }

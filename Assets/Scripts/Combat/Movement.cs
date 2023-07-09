@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -11,23 +9,11 @@ public class Movement : MonoBehaviour
     private float _currentDirection;
     private bool _canMove = true;
 
-    private Rigidbody2D _rb;
-    private Knockback _knockback;
+    private Rigidbody2D _rigidBody;
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _knockback = GetComponent<Knockback>();
-    }
-
-    private void OnEnable() {
-        _knockback.OnKnockBackStart += KnockBackStart;
-        _knockback.OnKnockBackEnd += KnockBackEnd;
-    }
-
-    private void OnDisable() {
-        _knockback.OnKnockBackStart -= KnockBackStart;
-        _knockback.OnKnockBackEnd -= KnockBackEnd;
+        _rigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
@@ -40,12 +26,12 @@ public class Movement : MonoBehaviour
         _currentDirection = currentDirection;
     }
 
-    private void KnockBackStart()
+    public void KnockBackStart()
     {
         _canMove = false;
     }
 
-    private void KnockBackEnd()
+    public void KnockBackEnd()
     {
         _canMove = true;
     }
@@ -54,7 +40,7 @@ public class Movement : MonoBehaviour
     {
         if (!_canMove) { return; }
 
-        Vector2 newVelocity = new Vector2(_currentDirection * _moveSpeed, _rb.velocity.y);
-        _rb.velocity = newVelocity;
+        Vector2 newVelocity = new (_currentDirection * _moveSpeed, _rigidBody.velocity.y);
+        _rigidBody.velocity = newVelocity;
     }
 }

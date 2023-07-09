@@ -55,7 +55,7 @@ PrefabInstance:
     - target: {fileID: 2893525743699256665, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 18c82a7dad2da1d469d16fc1cb4621df, type: 2}
+      objectReference: {fileID: 2100000, guid: 7ec5b6bc2f0eaf24a8403b43f9a11df6, type: 2}
     - target: {fileID: 4366686615820010290, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 2
@@ -99,6 +99,10 @@ PrefabInstance:
     - target: {fileID: 7882678833386788365, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
       propertyPath: m_Name
       value: Grenade VFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882678833386788365, guid: 6e775fd710f40774ebf1b27c110c4863, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

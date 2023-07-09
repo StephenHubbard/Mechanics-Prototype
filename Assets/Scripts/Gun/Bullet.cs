@@ -11,15 +11,13 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int _damageAmount = 1;
 
     private bool _isInitialized = false;
-    private Vector2 _fireDirection;
-    private Vector2 _previousPosition;
-    private Vector2 _playerPosOnFire; // getting player pos on fire in case player dies while bullet is in air
-    private Rigidbody2D _rb;
+    private Vector2 _fireDirection, _previousPosition, _playerPosOnFire;
+    private Rigidbody2D _rigidBody;
     private Gun _gun;
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        _rigidBody = GetComponent<Rigidbody2D>();
         _previousPosition = transform.position;
         _gun = FindObjectOfType<Gun>();
     }
@@ -34,6 +32,11 @@ public class Bullet : MonoBehaviour
     }
 
     private void OnEnable()
+    {
+        InitializeFromPool();
+    }
+
+    private void InitializeFromPool()
     {
         _isInitialized = true;
         _playerPosOnFire = PlayerController.Instance.transform.position;
@@ -51,7 +54,7 @@ public class Bullet : MonoBehaviour
 
     private void MoveProjectile()
     {
-        _rb.velocity = _fireDirection * _moveSpeed;
+        _rigidBody.velocity = _fireDirection * _moveSpeed;
     }
 
     // continous rb2d detection doesn't work on static tilemap if tilemap also has rb.  Tilemap needs it for composite collider2d for smooth walking for collider movement.
@@ -59,7 +62,7 @@ public class Bullet : MonoBehaviour
     {
         if (!_isInitialized) return;
 
-        Vector2 newPosition = _rb.position;
+        Vector2 newPosition = _rigidBody.position;
         Vector2 direction = (newPosition - _previousPosition).normalized;
         float distance = Vector2.Distance(newPosition, _previousPosition);
 
@@ -78,7 +81,7 @@ public class Bullet : MonoBehaviour
     {
         Instantiate(_hitVFX, transform.position, Quaternion.identity);
 
-        IHitable iHitable = hit.collider.gameObject.GetComponent<IHitable>();
+        IBulletCollideable iHitable = hit.collider.gameObject.GetComponent<IBulletCollideable>();
         iHitable?.TakeHit(hit, _playerPosOnFire, _knockBackForce, _damageAmount);
 
         _gun.ReleaseBulletFromPool(this);
