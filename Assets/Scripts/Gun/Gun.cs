@@ -46,21 +46,26 @@ public class Gun : MonoBehaviour
     }
 
     private void OnEnable() {
-        OnShoot += Shoot;
+        OnShoot += ShootProjectile;
         OnShoot += MuzzleFlash;
         OnGrenadeShoot += ThrowGrenade;
     }
 
     private void OnDisable() {
-        OnShoot -= Shoot;
+        OnShoot -= ShootProjectile;
         OnShoot -= MuzzleFlash;
         OnGrenadeShoot -= ThrowGrenade;
     }
 
-    private void Update() {
-        if (Utils.IsOverUI()) { return; }
+    private void Update()
+    {
+        GatherInput();
+        Shoot();
+    }
 
-        FrameInput = _playerInput.FrameInput;
+    private void Shoot()
+    {
+        if (Utils.IsOverUI()) { return; }
 
         if (FrameInput.AttackHeld && Time.time >= _lastFireTime + _gunFireCD)
         {
@@ -71,6 +76,10 @@ public class Gun : MonoBehaviour
         {
             OnGrenadeShoot?.Invoke();
         }
+    }
+
+    private void GatherInput() {
+        FrameInput = _playerInput.FrameInput;
     }
 
     // Was getting some jitter since player is moving on FixedUpdate
@@ -110,7 +119,7 @@ public class Gun : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    private void Shoot()
+    private void ShootProjectile()
     {
         Bullet newBullet = _bulletPool.Get();
         _animator.Play(FIRE_HASH, 0, 0);
