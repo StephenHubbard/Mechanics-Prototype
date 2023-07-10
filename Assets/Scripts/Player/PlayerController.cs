@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _gravityDelay = .4f;
 
     private float _coyoteTimer, _lastDash, _lastJumpPressed, _timeInAir;
-    private bool _doubleJumpAvailable, _coyoteJump;
+    private bool _doubleJumpAvailable;
 
     private PlayerInput _playerInput;
     private FrameInput _frameInput;

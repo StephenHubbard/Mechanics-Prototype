@@ -22,12 +22,13 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _rotationClamp = 60f;
     [SerializeField] private float muzzleFlashTime = .07f;
 
-    private Coroutine muzzleFlashRoutine;
-    private FrameInput FrameInput;
     private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
-    private ObjectPool<Bullet> _bulletPool;
     private float _lastFireTime = -1; // better to initialize it to -1 than 0 (from chatgpt)
     private float _lastThrowTime = -1; 
+    
+    private FrameInput FrameInput;
+    private ObjectPool<Bullet> _bulletPool;
+    private Coroutine muzzleFlashRoutine;
     private Animator _animator;
     private PlayerInput _playerInput;
     private PlayerController _playerController;
