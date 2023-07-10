@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
-        _fade = FindObjectOfType<Fade>();
+        _fade = FindFirstObjectByType<Fade>();
         _health = GetComponent<Health>();
         _playerAnimations = GetComponent<PlayerAnimations>();
         _movement = GetComponent<Movement>();

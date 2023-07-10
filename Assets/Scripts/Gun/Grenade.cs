@@ -29,7 +29,7 @@ public class Grenade : MonoBehaviour
     private void Awake() {
         _rigidBody = GetComponent<Rigidbody2D>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
-        _audioManager = FindObjectOfType<AudioManager>();
+        _audioManager = FindFirstObjectByType<AudioManager>();
     }
 
     private void Start() {

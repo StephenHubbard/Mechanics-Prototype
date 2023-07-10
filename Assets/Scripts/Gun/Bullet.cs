@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _previousPosition = transform.position;
-        _gun = FindObjectOfType<Gun>();
+        _gun = FindFirstObjectByType<Gun>();
     }
 
     private void Update() {

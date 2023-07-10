@@ -6,7 +6,7 @@ public class Discoball : MonoBehaviour, IBulletCollideable
 
     private void Awake()
     {
-        _discoballManager = FindObjectOfType<DiscoballManager>();
+        _discoballManager = FindFirstObjectByType<DiscoballManager>();
     }
 
     public void TakeHit(RaycastHit2D hit, Vector2 playerPosOnFire, float knockbackForce, int damageAmount)

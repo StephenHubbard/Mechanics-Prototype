@@ -18,7 +18,7 @@ public class Fade : MonoBehaviour
     public void Awake()
     {
         _imageToFade = GetComponent<Image>();
-        _virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
+        _virtualCam = FindFirstObjectByType<CinemachineVirtualCamera>();
     }
 
     public void FadeIn()

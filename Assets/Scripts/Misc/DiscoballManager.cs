@@ -27,7 +27,7 @@ public class DiscoballManager : MonoBehaviour
 
     private void Start()
     {
-        _allSpotlights = FindObjectsOfType<ColorSpotlight>();
+        _allSpotlights = FindObjectsByType<ColorSpotlight>(FindObjectsSortMode.None);
     }
 
     private void OnEnable() {

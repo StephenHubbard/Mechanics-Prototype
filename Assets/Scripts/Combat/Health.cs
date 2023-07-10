@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
     private void Awake() {
         _knockBack = GetComponent<Knockback>();
         _colorChanger = GetComponent<ColorChanger>();
-        _score = FindObjectOfType<Score>();
+        _score = FindFirstObjectByType<Score>();
     }
 
     private void Start() {
