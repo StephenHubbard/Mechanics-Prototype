@@ -5,12 +5,11 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField] private SoundsCollectionSO _soundsCollectionSO;
     [SerializeField] private AudioMixerGroup _sfxMixerGroup;
     [SerializeField] private AudioMixerGroup _musicMixerGroup;
     [Range(0, 1f)]
     [SerializeField] private float _masterVolume = .7f;
-    [SerializeField] private float _randomPitchRange = .1f;
-    [SerializeField] private SoundsSO soundSO;
     
     private AudioSource _currentMusic;
 
@@ -46,17 +45,29 @@ public class AudioManager : MonoBehaviour
 
     #region Sound Methods
 
-    public void SoundToPlay(Sound sound, bool randomizePitch = false) {
-        AudioClip audioClip = sound.Clip;
+    private void PlayRandomSound(SoundSO[] sounds)
+    {
+        SoundSO soundSO = null;
+
+        if (sounds != null && sounds.Length > 0)
+        {
+            soundSO = sounds[Random.Range(0, sounds.Length)];
+
+            SoundToPlay(soundSO);
+        }
+    }
+
+    public void SoundToPlay(SoundSO soundSO) {
+        AudioClip audioClip = soundSO.Clip;
         AudioMixerGroup audioMixerGroup;
 
-        switch (sound.AudioType)
+        switch (soundSO.AudioType)
         {
-            case Sound.AudioTypes.SFX:
+            case SoundSO.AudioTypes.SFX:
                 audioMixerGroup = _sfxMixerGroup;
                 break;
 
-            case Sound.AudioTypes.Music:
+            case SoundSO.AudioTypes.Music:
                 audioMixerGroup = _musicMixerGroup;
                 break;
             
@@ -65,21 +76,21 @@ public class AudioManager : MonoBehaviour
                 break;
         }
 
-        if (randomizePitch) { 
-            PlaySoundRandomizePitch(audioClip, audioMixerGroup, sound.Loop, transform.position, sound.Volume, sound.Pitch);
+        float soundPitch;
+
+        if (soundSO.RandomizePitch) {
+            float randomPitchModifier = Random.Range(-soundSO.RandomPitchRangeModifier, soundSO.RandomPitchRangeModifier);
+            soundPitch = soundSO.Pitch + randomPitchModifier;
         } else {
-            PlaySound(audioClip, audioMixerGroup, sound.Loop, transform.position, sound.Volume, sound.Pitch);
+            soundPitch = soundSO.Pitch;
         }
+
+        PlaySound(audioClip, audioMixerGroup, soundSO.Loop, transform.position, soundSO.Volume, soundPitch);
     }
 
-    public void PlaySoundRandomizePitch(AudioClip audioClip, AudioMixerGroup audioMixerGroup, bool loop, Vector3 position, float volume = 1f, float pitch = 1f)
+    public void PlaySound(AudioClip audioClip, AudioMixerGroup audioMixerGroup, bool loop, Vector3 position, float volume, float pitch)
     {
-        float randomPitch = pitch - Random.Range(-_randomPitchRange, _randomPitchRange);
-        PlaySound(audioClip, audioMixerGroup, loop, transform.position, volume, randomPitch);
-    }
-
-    public void PlaySound(AudioClip audioClip, AudioMixerGroup audioMixerGroup, bool loop, Vector3 position, float volume = 1f, float pitch = 1f)
-    {
+        // garbage collection gonna add to performance negatively
         GameObject soundObject = new GameObject("Temp Audio Source");
         soundObject.transform.position = position;
         AudioSource audioSource = soundObject.AddComponent<AudioSource>();
@@ -109,77 +120,62 @@ public class AudioManager : MonoBehaviour
 
     public void Discoball_Music()
     {
-        Sound sound = soundSO.Discoball_Music[Random.Range(0, soundSO.MegaKill.Length)];
-        SoundToPlay(sound);
-        Utils.RunAfterDelay(this, sound.Clip.length, FightMusic);
+        PlayRandomSound(_soundsCollectionSO.DiscoballMusic);
+        float soundLength = _soundsCollectionSO.DiscoballMusic[0].Clip.length;
+        Utils.RunAfterDelay(this, soundLength, FightMusic);
     }
 
     public void FightMusic()
     {
-        Sound sound = soundSO.Fight_Music[Random.Range(0, soundSO.Fight_Music.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.FightMusic);
     }
 
     #endregion
 
     #region Sounds
 
-    public void Health_OnDeath(Health sender) {
-        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
-        SoundToPlay(sound, true);
-    }
-
     public void Health_OnDeath()
     {
-        Sound sound = soundSO.Splat[Random.Range(0, soundSO.Splat.Length)];
-        SoundToPlay(sound, true);
+        PlayRandomSound(_soundsCollectionSO.Splat);
     }
 
     public void Gun_OnShoot()
     {
-        Sound sound = soundSO.GunShoot[Random.Range(0, soundSO.GunShoot.Length)];
-        SoundToPlay(sound, true);
+        PlayRandomSound(_soundsCollectionSO.GunShoot);
     }
 
     public void Gun_OnGrenadeShoot()
     {
-        Sound sound = soundSO.GrenadeShoot[Random.Range(0, soundSO.GrenadeShoot.Length)];
-        SoundToPlay(sound, true);
+        PlayRandomSound(_soundsCollectionSO.GrenadeShoot);
     }
 
     public void Grenade_OnBeep()
     {
-        Sound sound = soundSO.GrenadeBeep[Random.Range(0, soundSO.GrenadeBeep.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.GrenadeBeep);
     }
 
     public void Grenade_OnExplode()
     {
-        Sound sound = soundSO.GrenadeExplosion[Random.Range(0, soundSO.GrenadeExplosion.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.GrenadeExplosion);
     }
 
     public void PlayerController_OnPlayerHit(Enemy enemy)
     {
-        Sound sound = soundSO.PlayerHit[Random.Range(0, soundSO.PlayerHit.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.PlayerHit);
     }
 
     public void PlayerController_OnJetpack()
     {
-        Sound sound = soundSO.Jetpack[Random.Range(0, soundSO.Jetpack.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.Jetpack);
     }
 
     public void MegaKill() {
-        Sound sound = soundSO.MegaKill[Random.Range(0, soundSO.MegaKill.Length)];
-        SoundToPlay(sound);
+        PlayRandomSound(_soundsCollectionSO.MegaKill);
     }
 
     public void PlayerController_OnJump()
     {
-        Sound sound = soundSO.Jump[Random.Range(0, soundSO.MegaKill.Length)];
-        SoundToPlay(sound, true);
+        PlayRandomSound(_soundsCollectionSO.Jump);
     }
 
     #endregion

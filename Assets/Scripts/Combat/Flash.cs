@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Flash : MonoBehaviour
 {
+    [SerializeField] private Material _defaultMat;
     [SerializeField] private Material _whiteFlashMat;
     [SerializeField] private float _flashTime = 0.1f;
 
-    private Material _defaultMat;
     private SpriteRenderer[] _spriteRenderers;
     private ColorChanger _colorChanger;
 
@@ -15,31 +15,38 @@ public class Flash : MonoBehaviour
     {
         _colorChanger = GetComponent<ColorChanger>();
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-        _defaultMat = _spriteRenderers[0].material;
     }
 
     private void OnEnable()
     {
-        foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
-        {
-            spriteRenderer.material = _defaultMat;
-        }
+        SetDefaultMat();
     }
 
-    public IEnumerator FlashRoutine()
+    public void StartFlash() {
+        StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
     {
         foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
         {
             spriteRenderer.material = _whiteFlashMat;
-            if (_colorChanger) { _colorChanger.SetFillColorWhite(); }
+
+            if (_colorChanger) { _colorChanger.SetColor(Color.white); }
         }
 
         yield return new WaitForSeconds(_flashTime);
 
+        SetDefaultMat();
+    }
+
+    private void SetDefaultMat()
+    {
         foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
         {
             spriteRenderer.material = _defaultMat;
-            if (_colorChanger) { _colorChanger.SetFillColorDefault(); }
+
+            if (_colorChanger) { _colorChanger.SetColor(_colorChanger.DefaultColor); }
         }
     }
 }

@@ -16,6 +16,7 @@ public class Pipe : MonoBehaviour
 
     private void Awake() {
         _colorChanger = GetComponent<ColorChanger>();
+        
         CreateEnemyPool();
     }
 
@@ -47,14 +48,14 @@ public class Pipe : MonoBehaviour
     private IEnumerator SpawnRoutine() {
         while (true)
         {
+            _colorChanger.SetRandomColor();
             Enemy enemy = _enemyPool.Get();
-            enemy.EnemyInit(this, _colorChanger.CurrentColor);
+            enemy.EnemyInit(this, _colorChanger.DefaultColor);
 
             float randomTimeModifier = Random.Range(-_randomizeSpawnTimerModifer, _randomizeSpawnTimerModifer);
             float spawnWaitTime = Mathf.Max(_spawnTimer + randomTimeModifier, _minSpawnWaitTime);
 
             yield return new WaitForSeconds(spawnWaitTime);
-            _colorChanger.SetRandomColor();
         }
     }
 }

@@ -5,36 +5,57 @@ using System;
 
 public class Knockback : MonoBehaviour
 {
+    public Action OnKnockbackStart;
+    public Action OnKnockbackEnd;
+    
     public float KnockBackTime => _knockBackTime;
 
     [SerializeField] private float _knockBackTime = .2f;
 
+    private Vector3 _hitDirection;
+    private float _knockBackThrust;
+
     private Rigidbody2D _rigidBody;
-    private ColorChanger _colorChanger;
-    private Flash _flash;
-    private Movement _movement;
+
+    private void OnEnable() {
+        OnKnockbackStart += ApplyKnockbackForce;
+        OnKnockbackEnd += StopKnockbackForce;
+    }
+
+    private void OnDisable() {
+        
+        OnKnockbackStart -= ApplyKnockbackForce;
+        OnKnockbackEnd -= StopKnockbackForce;
+    }
 
     private void Awake()
     {
-        _flash = GetComponent<Flash>();
-        _colorChanger = GetComponent<ColorChanger>();
         _rigidBody = GetComponent<Rigidbody2D>();
-        _movement = GetComponent<Movement>();
     }
 
     public void GetKnockedBack(Vector3 hitDirection, float knockbackThrust)
     {
-        Vector3 difference = (transform.position - hitDirection).normalized * knockbackThrust * _rigidBody.mass;
+        _hitDirection = hitDirection;
+        _knockBackThrust = knockbackThrust;
+
+        OnKnockbackStart?.Invoke();
+    }
+
+    private void ApplyKnockbackForce()
+    {
+        Vector3 difference = (transform.position - _hitDirection).normalized * _knockBackThrust * _rigidBody.mass;
         _rigidBody.AddForce(difference, ForceMode2D.Impulse);
         StartCoroutine(KnockRoutine());
-        StartCoroutine(_flash.FlashRoutine());
-        _movement.KnockBackStart();
     }
 
     private IEnumerator KnockRoutine()
     {
         yield return new WaitForSeconds(_knockBackTime);
+        OnKnockbackEnd?.Invoke();
+    }
+
+    private void StopKnockbackForce()
+    {
         _rigidBody.velocity = Vector2.zero;
-        _movement.KnockBackEnd();
     }
 }

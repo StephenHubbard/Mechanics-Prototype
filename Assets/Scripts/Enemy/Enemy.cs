@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IBulletCollideable
+public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 {
     public float KnockbackThrust => _knockBackThrust;
     public int EnemyDamageAmount => _damageAmount;
@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour, IBulletCollideable
     private Movement _movement;
     private Health _health;
     private ColorChanger _colorChanger;
+    private Flash _flash;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour, IBulletCollideable
         _movement = GetComponent<Movement>();
         _health = GetComponent<Health>();
         _colorChanger = GetComponent<ColorChanger>();
+        _flash = GetComponent<Flash>();
     }
 
     private IEnumerator Start()
@@ -41,7 +43,7 @@ public class Enemy : MonoBehaviour, IBulletCollideable
         _health.ResetHealth();
         _pipe = pipe;
         transform.position = pipe.transform.position;
-        _colorChanger.SetColor(color);
+        _colorChanger.SetDefaultColor(color);
     }
 
     public void EnemyDeath()
@@ -49,14 +51,20 @@ public class Enemy : MonoBehaviour, IBulletCollideable
         _pipe.ReleaseEnemyFromPool(this);
     }
 
-    public void TakeHit(RaycastHit2D hit, Vector2 playerPosOnFire, float knockbackForce, int damageAmount) {
-        if (_health && _health.CurrentHealth > 0)
-        {
-            Knockback knockback = hit.collider.gameObject.GetComponent<Knockback>();
-            knockback?.GetKnockedBack(playerPosOnFire, knockbackForce);
+    public void TakeHit(int damageAmount)
+    {
+        _health.TakeDamage(damageAmount);
 
-            Health health = hit.collider.gameObject.GetComponent<Health>();
-            health?.TakeDamage(damageAmount);
+        if (_health.CurrentHealth > 0) {
+            _flash.StartFlash();
+        }
+    }
+
+    public void HandleKnockback(Vector2 playerPosOnFire, float knockbackForce)
+    {
+        if (_health.CurrentHealth > 0)
+        {
+            _knockback.GetKnockedBack(playerPosOnFire, knockbackForce);
         }
     }
 

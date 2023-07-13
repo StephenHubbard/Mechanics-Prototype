@@ -15,13 +15,9 @@ public class Health : MonoBehaviour
     [SerializeField] private GameObject _deathSplatter;
     [SerializeField] private GameObject _deathVFX;
 
-    private Knockback _knockBack;
-    private ColorChanger _colorChanger;
     private Score _score;
 
     private void Awake() {
-        _knockBack = GetComponent<Knockback>();
-        _colorChanger = GetComponent<ColorChanger>();
         _score = FindFirstObjectByType<Score>();
     }
 

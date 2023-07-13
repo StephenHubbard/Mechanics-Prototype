@@ -13,7 +13,6 @@ public abstract class Utils
         UnityEngine.Object.Destroy(go, destroyDelay);
     }
 
-    // a bit overly complicated perhaps but seems like a good way to do it as a teaching moment
     public static void RunAfterDelay(MonoBehaviour monoBehaviour, float delay, Action task)
     {
         monoBehaviour.StartCoroutine(RunAfterDelayCoroutine(delay, task));

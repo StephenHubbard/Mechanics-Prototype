@@ -63,14 +63,18 @@ public class Bullet : MonoBehaviour
         {
             Collide(hit);
         }
-
     }
 
     private void Collide(RaycastHit2D hit)
     {
         Instantiate(_hitVFX, transform.position, Quaternion.identity);
-        IBulletCollideable iHitable = hit.collider.gameObject.GetComponent<IBulletCollideable>();
-        iHitable?.TakeHit(hit, _playerPosOnFire, _knockBackForce, _damageAmount);
+
+        IDamageable iDamageable = hit.collider.gameObject.GetComponent<IDamageable>();
+        iDamageable?.TakeHit(_damageAmount);
+
+        IKnockbackable iKnockbackable = hit.collider.gameObject.GetComponent<IKnockbackable>();
+        iKnockbackable?.HandleKnockback(_playerPosOnFire, _knockBackForce);
+        
         _isInitialized = false;
         _previousPosition = _rigidBody.position;
         _gun.ReleaseBulletFromPool(this);

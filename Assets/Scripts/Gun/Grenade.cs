@@ -6,6 +6,7 @@ using System;
 
 public class Grenade : MonoBehaviour
 {
+    // look into mediator pattern with a middle event manager system class
     public Action OnBeep;
     public Action OnExplode;
 

@@ -129,6 +129,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3618655909936745033}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -152,7 +153,8 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: -0.008823872, y: 0.31664395}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,7 +165,6 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 1.770503, y: 1.3810277}
   m_EdgeRadius: 0
 --- !u!114 &4791099108878134356
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392f736f90af0bb4e90d372014cc9b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 2730755534599638069, guid: a099caf06a6e56041983d3c555f5d1be, type: 3}
+  _enemyPrefab: {fileID: 1570401801518990893, guid: a099caf06a6e56041983d3c555f5d1be, type: 3}
   _spawnTimer: 3
   _randomizeSpawnTimerModifer: 1
 --- !u!114 &785067680621265755
@@ -193,7 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ee6b8ef069edb40ad8da925828717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setColorOnStart: 1
   _colors:
   - {r: 0.6392157, g: 1, b: 0.78431374, a: 1}
   - {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
@@ -209,7 +209,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!1 &8827270105749232870
 GameObject:

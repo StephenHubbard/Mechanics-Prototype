@@ -10,10 +10,22 @@ public class Movement : MonoBehaviour
     private bool _canMove = true;
 
     private Rigidbody2D _rigidBody;
+    private Knockback _knockback;
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _knockback = GetComponent<Knockback>();
+    }
+
+    private void OnEnable() {
+        _knockback.OnKnockbackStart += CanMoveFalse;
+        _knockback.OnKnockbackEnd += CanMoveTrue;
+    }
+
+    private void OnDisable() {
+        _knockback.OnKnockbackStart -= CanMoveFalse;
+        _knockback.OnKnockbackEnd -= CanMoveTrue;
     }
 
     private void FixedUpdate()
@@ -26,12 +38,12 @@ public class Movement : MonoBehaviour
         _currentDirection = currentDirection;
     }
 
-    public void KnockBackStart()
+    public void CanMoveFalse()
     {
         _canMove = false;
     }
 
-    public void KnockBackEnd()
+    public void CanMoveTrue()
     {
         _canMove = true;
     }

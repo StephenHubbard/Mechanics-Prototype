@@ -33,10 +33,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private TrailRenderer _trailRenderer;
     private Knockback _knockBack;
-    private Fade _fade;
     private Health _health;
     private PlayerAnimations _playerAnimations;
     private Movement _movement;
+    private Flash _flash;
 
     public void Awake() {
         if (Instance == null) { Instance = this; }
@@ -45,10 +45,10 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _knockBack = GetComponent<Knockback>();
-        _fade = FindFirstObjectByType<Fade>();
         _health = GetComponent<Health>();
         _playerAnimations = GetComponent<PlayerAnimations>();
         _movement = GetComponent<Movement>();
+        _flash = GetComponent<Flash>();
     }
 
     private void Start() {
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         Jetpack();
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
@@ -104,7 +104,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public void PlayerDeath() {
-        _fade.FadeIn();
+        Fade fade = FindFirstObjectByType<Fade>();
+        fade.FadeIn();
         Destroy(gameObject);
     }
 
@@ -130,6 +131,7 @@ public class PlayerController : MonoBehaviour
         Vector3 hitDirection = enemy.transform.position;
         float knockBackThrust = enemy.KnockbackThrust;
         _knockBack.GetKnockedBack(hitDirection, knockBackThrust);
+        _flash.StartFlash();
     }
 
     private void HandleJump()
