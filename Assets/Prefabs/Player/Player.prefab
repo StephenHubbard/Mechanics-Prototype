@@ -10581,7 +10581,7 @@ Transform:
   - {fileID: 4957389114707841508}
   - {fileID: 6098175444894000029}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6592435842059604156
 MonoBehaviour:
@@ -10609,7 +10609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 1032
   _feetTransform: {fileID: 6098175444894000029}
   _groundCheck: {x: 1.12, y: 0.2}
   _visuals: {fileID: 2034445529224776370}

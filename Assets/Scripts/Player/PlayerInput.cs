@@ -7,7 +7,7 @@ public class PlayerInput : MonoBehaviour
 {
     public FrameInput FrameInput { get; private set; }
     private PlayerInputActions _inputActions;
-    private InputAction _move, _attack, _jump, _jetpack, _grenade;
+    private InputAction _move, _attack, _jump, _jetpack, _grenade, _down;
 
     private void Awake() {
         _inputActions = new PlayerInputActions();
@@ -17,6 +17,7 @@ public class PlayerInput : MonoBehaviour
         _jump = _inputActions.Player.Jump;
         _jetpack = _inputActions.Player.Jetpack;
         _grenade = _inputActions.Player.Grenade;
+        _down = _inputActions.Player.Down;
     }
 
     private void Update() {
@@ -36,6 +37,7 @@ public class PlayerInput : MonoBehaviour
             Attack = _attack.WasPressedThisFrame(),
             AttackHeld = _attack.IsPressed(),
             Grenade = _grenade.WasPressedThisFrame(),
+            Down = _down.WasPressedThisFrame(),
         };
     }
 }
@@ -48,5 +50,5 @@ public struct FrameInput
     public bool Dash;
     public bool Jump;
     public bool Grenade;
-    public bool Use;
+    public bool Down;
 }

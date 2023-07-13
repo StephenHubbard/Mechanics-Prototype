@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
 
     private float _coyoteTimer, _lastDash, _lastJumpPressed, _timeInAir;
     private bool _doubleJumpAvailable;
-
+    
+    private OneWayPlatform _oneWayPlatform;
     private PlayerInput _playerInput;
     private FrameInput _frameInput;
     private Rigidbody2D _rigidBody;
@@ -80,6 +81,7 @@ public class PlayerController : MonoBehaviour
         HandleJump();
         GravityDelay();
         Jetpack();
+        OneWayPlatform();
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -88,6 +90,26 @@ public class PlayerController : MonoBehaviour
 
         if (enemy && _movement.CanMove) {
             OnPlayerHit?.Invoke(enemy);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        OneWayPlatform oneWayPlatform = other.gameObject.GetComponent<OneWayPlatform>();
+
+        if (oneWayPlatform)
+        {
+            _oneWayPlatform = oneWayPlatform;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        OneWayPlatform oneWayPlatform = other.gameObject.GetComponent<OneWayPlatform>();
+
+        if (oneWayPlatform)
+        {
+            _oneWayPlatform = null;
         }
     }
 
@@ -117,6 +139,12 @@ public class PlayerController : MonoBehaviour
     private void GatherInput()
     {
         _frameInput = _playerInput.FrameInput;
+    }
+
+    private void OneWayPlatform() {
+        if (_frameInput.Down && _oneWayPlatform != null) {
+            StartCoroutine(_oneWayPlatform.DisablePlatformColliderRoutine(this));
+        }
     }
 
     private void Movement() {
